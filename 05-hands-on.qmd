@@ -1,0 +1,67 @@
+---
+format:
+  revealjs:
+    output-file: 05-hands-on-slides.html
+---
+
+# Hands-on Exercise
+
+In this section you will practice the contribution workflow end-to-end with a small, reviewable change.
+
+## Choose your path
+
+Pick one exercise based on your comfort level:
+
+| Level | Exercise | Repo |
+|---|---|---|
+| Beginner | Fix a typo or broken link in docs | `docs` or `bayesplot` |
+| Intermediate | Add a regression test for a known edge case | `posterior` or `loo` |
+| Advanced | Prototype a small diagnostic or plot function | `bayesplot` |
+
+## Before you start
+
+1. Find a `good-first-issue` or open a new issue describing your planned change
+2. Comment on the issue so no one duplicates your work
+3. Fork the repo and create a branch: `fix/123-short-description`
+
+## Environment setup
+
+```{r}
+#| echo: true
+#| eval: false
+#| file: includes/_setup.R
+
+# install.packages("devtools")
+# devtools::install_deps(dependencies = TRUE)
+# devtools::load_all()
+```
+
+For `cmdstanr`, also install CmdStan following the package vignette.
+
+## Your turn
+
+::: {.content-visible when-format="revealjs"}
+1. Fork → branch → change → test → PR
+2. Link the issue in your PR description
+3. Request review when CI is green
+:::
+
+::: {.content-visible when-format="html" unless-format="revealjs"}
+Work through these steps:
+
+1. Make your change on a dedicated branch.
+2. Run `devtools::test()` — all tests pass.
+3. Run `devtools::check()` — no new warnings.
+4. Open a PR with: **problem**, **solution**, **how you tested**, and a link to the issue.
+5. Respond to review feedback on the same branch.
+
+Share your PR link in the workshop chat when ready for feedback.
+:::
+
+## Wrap-up
+
++ What repo did you choose, and why?
++ What was harder than expected?
++ What would you contribute next?
+
+Resources: [Stan Forums (Developers)](https://discourse.mc-stan.org/c/development/12), [github.com/stan-dev](https://github.com/stan-dev)

@@ -1,0 +1,400 @@
+/* StanCon slide deck customizations */
+
+:root {
+  --r-main-font-size: 32px;
+  --r-heading1-size: 2.2em;
+  --r-heading2-size: 1.45em;
+  --r-heading3-size: 1.15em;
+  /* Palette from stan_logo.png: circle blue, ribbon cream, ribbon navy */
+  --stan-blue: #2E7FB0;
+  --stan-blue-dark: #052744;
+  --stan-blue-light: #5AA3C9;
+  --stan-logo-blue: #3080B0;
+  --stan-logo-shadow: #002040;
+  --stan-cream: #F5E8C9;
+  --stan-slate: #4A5560;
+  --stan-slate-light: #7A8490;
+  --stan-rule: #B8C0C8;
+  --stan-bg: color-mix(in srgb, #F2E5BD 10%, #ffffff);
+  --r-background-color: var(--stan-bg);
+  --slide-body-font-size: 0.8em;
+  --stan-logo-size: 9.5rem;
+}
+
+.reveal {
+  font-size: var(--r-main-font-size);
+  background-color: var(--stan-bg);
+}
+
+/* Atmosphere: cool wash from logo blues */
+.reveal .slide-background,
+.reveal .slide-background-content {
+  background-color: var(--stan-bg);
+}
+
+.reveal .slide-background-content {
+  background-image:
+    radial-gradient(
+      ellipse 60% 75% at 100% 0%,
+      color-mix(in srgb, var(--stan-logo-blue) 8%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 55% 60% at 0% 100%,
+      color-mix(in srgb, var(--stan-logo-shadow) 5%, transparent),
+      transparent 68%
+    );
+  background-color: var(--stan-bg);
+  background-repeat: no-repeat;
+}
+
+/* Soft logo watermarks — layered around the corner logo */
+.reveal::before,
+.reveal::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("img/stan_logo_watermark.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Mid watermark (~1.55× logo) */
+.reveal::after {
+  right: 0.35rem;
+  bottom: 0.15rem;
+  width: calc(var(--stan-logo-size) * 1.55);
+  height: calc(var(--stan-logo-size) * 1.55);
+  opacity: 0.055;
+}
+
+/* Larger outer shadow (~2.15× logo) */
+.reveal::before {
+  right: -0.35rem;
+  bottom: -0.55rem;
+  width: calc(var(--stan-logo-size) * 2.15);
+  height: calc(var(--stan-logo-size) * 2.15);
+  opacity: 0.028;
+}
+
+/* Keep slide content above decorative chrome */
+.reveal .slides {
+  z-index: 2;
+}
+
+/* Footer logo — must beat Quarto footer.css (loaded after slides.css) */
+.reveal img.slide-logo {
+  max-height: var(--stan-logo-size) !important;
+  height: var(--stan-logo-size) !important;
+  width: auto !important;
+  max-width: none !important;
+  right: 10px;
+  bottom: 6px;
+}
+
+.reveal .slide-logo,
+.reveal .footer,
+.reveal .slide-number,
+.reveal .controls,
+.reveal .progress,
+.reveal .section-label {
+  z-index: 3;
+}
+
+.reveal .progress {
+  color: var(--stan-logo-blue);
+}
+
+.reveal .controls {
+  color: var(--stan-logo-blue);
+}
+
+/* Third, shy-est logo layer (~2.85× logo) */
+.reveal .slide-background-content::after {
+  content: "";
+  position: absolute;
+  right: -1.1rem;
+  bottom: -1.4rem;
+  width: calc(var(--stan-logo-size) * 2.85);
+  height: calc(var(--stan-logo-size) * 2.85);
+  pointer-events: none;
+  background-image: url("img/stan_logo_watermark.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.015;
+}
+
+@media screen and (max-width: 800px) {
+  :root {
+    --stan-logo-size: 3.5rem;
+  }
+}
+
+.reveal h1 {
+  color: var(--stan-blue);
+  border-bottom: 2px solid var(--stan-blue);
+  padding-bottom: 0.25em;
+  margin-bottom: 0.5em;
+}
+
+/* Extra top inset so content clears the section label */
+.reveal .slides section.slide:not(.title-slide):not(.center) {
+  padding-top: 1.1em;
+}
+
+.reveal h2 {
+  color: var(--stan-blue-dark);
+  border-bottom: 2px solid var(--stan-rule);
+  padding-bottom: 0.25em;
+  margin-bottom: 0.5em;
+}
+
+.reveal h3,
+.reveal h4 {
+  color: var(--stan-slate);
+}
+
+.reveal h3::before {
+  content: "▹";
+  display: inline-block;
+  margin-right: 0.35em;
+  color: var(--stan-slate);
+  transform: translateY(-0.06em);
+}
+
+.reveal p,
+.reveal li,
+.reveal table,
+.reveal dl,
+.reveal blockquote {
+  font-size: var(--slide-body-font-size);
+}
+
+.reveal pre:not(.mermaid),
+.reveal pre:not(.mermaid) code {
+  font-size: 0.65em;
+  line-height: 1.25;
+}
+
+/* Mermaid: match Stan slide palette (Quarto JS theme uses these vars) */
+:root {
+  --mermaid-bg-color: transparent;
+  --mermaid-fg-color: var(--stan-slate);
+  --mermaid-fg-color--lighter: var(--stan-slate-light);
+  --mermaid-fg-color--lightest: color-mix(in srgb, var(--stan-cream) 55%, #ffffff);
+  --mermaid-node-bg-color: color-mix(in srgb, var(--stan-logo-blue) 14%, #ffffff);
+  --mermaid-node-fg-color: var(--stan-logo-blue);
+  --mermaid-edge-color: var(--stan-blue-dark);
+  --mermaid-label-bg-color: var(--stan-bg);
+  --mermaid-label-fg-color: var(--stan-blue-dark);
+  --mermaid-font-family: "Source Sans Pro", Helvetica, sans-serif;
+  --mermaid-font-weight: 600;
+}
+
+/* SVG mermaid (mermaid-format: svg) uses svg.flowchart, not .mermaid */
+.reveal .mermaid,
+.reveal svg.flowchart {
+  font-size: 18px;
+}
+
+.reveal .mermaid svg,
+.reveal svg.flowchart {
+  max-width: 100%;
+  width: 100%;
+  height: auto !important; /* Quarto SVG export sets a tall height; content is ~100px */
+  display: block;
+  margin: 0.25em auto !important;
+}
+
+/* Don't let Reveal auto-stretch inflate the flowchart */
+.reveal .r-stretch:has(svg.flowchart),
+.reveal svg.flowchart.r-stretch {
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Quarto wraps mermaid SVG in empty <p> tags that add vertical gap */
+.reveal .cell-output-display figure > p:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+
+.reveal .cell-output-display figure,
+.reveal .cell-output-display .nostretch,
+.reveal .nostretch {
+  margin: 0.25em 0 !important;
+}
+
+.reveal .mermaid .nodeLabel,
+.reveal .mermaid .nodeLabel p,
+.reveal .mermaid .label,
+.reveal .mermaid .label div,
+.reveal .mermaid .label span,
+.reveal svg.flowchart .nodeLabel,
+.reveal svg.flowchart .nodeLabel p,
+.reveal svg.flowchart .label,
+.reveal svg.flowchart .label div,
+.reveal svg.flowchart .label span,
+.reveal svg.flowchart foreignObject div,
+.reveal svg.flowchart foreignObject span,
+.reveal svg.flowchart foreignObject p,
+.reveal svg.flowchart foreignobject div,
+.reveal svg.flowchart foreignobject span,
+.reveal svg.flowchart foreignobject p {
+  text-align: center !important;
+}
+
+.reveal .mermaid .nodeLabel p,
+.reveal .mermaid p,
+.reveal svg.flowchart .nodeLabel p,
+.reveal svg.flowchart p {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+
+/* Vertically + horizontally center HTML labels inside node boxes */
+.reveal .mermaid foreignObject > div,
+.reveal .mermaid foreignobject > div,
+.reveal svg.flowchart foreignObject > div,
+.reveal svg.flowchart foreignobject > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+.reveal .mermaid .node .label text,
+.reveal .mermaid .node .label tspan,
+.reveal svg.flowchart .node .label text,
+.reveal svg.flowchart .node .label tspan {
+  text-anchor: middle !important;
+}
+
+/* Tables: ruled header, column dividers, bottom border */
+.reveal table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.reveal table th,
+.reveal table td {
+  border-bottom: none;
+}
+
+.reveal table thead {
+  border-top: 2px solid var(--stan-blue);
+}
+
+.reveal table thead th {
+  border-bottom: 2px solid var(--stan-rule);
+  padding: 0.35em 0.75em;
+  font-weight: 600;
+}
+
+.reveal table tbody td {
+  padding: 0.3em 0.75em;
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: 2px solid var(--stan-rule);
+}
+
+.reveal table th:not(:first-child),
+.reveal table td:not(:first-child) {
+  border-left: 1px solid #bbb;
+}
+
+/* Highlight */
+.hl {
+  color: var(--stan-blue-light);
+  font-weight: 700;
+}
+
+/* Inline icons (e.g. GitHub mark after list text) */
+.reveal .icon-github {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.25em;
+  vertical-align: -0.1em;
+  color: var(--stan-slate);
+}
+
+/* Content links only (not slide number, menu, controls, etc.) */
+.reveal .slides a {
+  color: var(--stan-blue);
+  text-decoration: underline;
+}
+.reveal .slides a:hover {
+  color: var(--stan-blue-dark);
+}
+
+.reveal .slide-number,
+.reveal .slide-menu-button,
+.reveal .slide-menu-wrapper a,
+.reveal .controls,
+.reveal .footer a {
+  text-decoration: none;
+}
+
+/* Match callout text size to other slide body text */
+.reveal .slides section div.callout {
+  font-size: 1em;
+}
+
+/* Callouts: transparent body, logo-blue header */
+.reveal div.callout.callout-note,
+.reveal div.callout.callout-important {
+  border-left-color: var(--stan-logo-blue);
+  background-color: transparent;
+}
+
+.reveal div.callout.callout-note.callout-style-default .callout-title,
+.reveal div.callout.callout-important.callout-style-default .callout-title {
+  background-color: var(--stan-logo-blue);
+  color: var(--stan-cream);
+}
+
+/* Quarto sets title <p> to --r-main-color; force logo cream */
+.reveal div.callout.callout-note.callout-style-default .callout-title p,
+.reveal div.callout.callout-important.callout-style-default .callout-title p,
+.reveal div.callout.callout-note.callout-style-default .callout-title strong,
+.reveal div.callout.callout-important.callout-style-default .callout-title strong {
+  color: var(--stan-cream);
+}
+
+.reveal div.callout.callout-note .callout-icon::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+}
+
+.reveal div.callout.callout-important .callout-icon::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-exclamation-triangle" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .044.017.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg>');
+}
+
+/* Parent section title — top-left, same height/size as slide number */
+.reveal .section-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 31;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--stan-logo-blue);
+  text-shadow: 0.1em 0.12em 0 color-mix(in srgb, var(--stan-logo-shadow) 8%, transparent);
+  text-align: left;
+  pointer-events: none;
+  background-color: transparent;
+}

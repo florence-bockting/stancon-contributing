@@ -1,0 +1,65 @@
+---
+format:
+  revealjs:
+    output-file: 03-contributing-slides.html
+---
+
+# How to Contribute
+
+The C++/OCaml core (`math`, `stanc3`, `stan`, `cmdstan`) follows a heavyweight GitFlow process. The **R packages** use lighter-weight workflows built around `devtools`, `testthat`, and `roxygen2` — usually the easiest entry point for applied researchers and R developers.
+
+All Stan packages share the same norms: discuss large changes first, keep PRs focused, add tests and documentation, update `NEWS.md`.
+
+## Types of contributions
+
+| Type | Examples | Process weight |
+|---|---|---|
+| Bug report | Reproducible failure on GitHub | Low |
+| Docs fix | Typo, broken link, unclear `@param` | Low |
+| Small bug fix | One-line logic fix + regression test | Low–medium |
+| New feature | New `ppc_*()` plot | Medium–high — discuss first |
+| Non-code | Forum answers, triage, vignettes | Low — very valuable |
+
+**Rule of thumb:** small, clear changes can go straight to a PR. Larger or opinionated changes need an issue and maintainer buy-in first.
+
+## The workflow
+
+1. **Orient** — read `README.md`, `CONTRIBUTING.md`, search open *and closed* issues
+2. **Issue first** — for anything beyond a trivial typo
+3. **Fork & branch** — never work on `main` directly
+4. **Focused change** — one issue, one PR; match existing style
+5. **Test locally** — `devtools::test()` and `devtools::check()`
+6. **Open PR** — clear description, link issue (`Closes #123`)
+7. **Review** — respond to every comment; CI must pass
+8. **Merge** — maintainer merges; sync your fork
+
+## What a good PR includes
+
++ Regression test for bug fixes
++ `roxygen2` docs for new/changed exports
++ `NEWS.md` entry with issue/PR number
++ Downstream awareness if touching **hub** packages like `posterior`
+
+## Common pitfalls
+
+::: {.content-visible when-format="revealjs"}
++ Big PR without discussing first
++ Bundling unrelated changes
++ Skipping tests for "small" fixes
++ Ignoring `posterior` downstream impact
+:::
+
+::: {.content-visible when-format="html" unless-format="revealjs"}
+1. **Jumping straight to a big PR** without discussing first.
+2. **Bundling unrelated changes** in one PR.
+3. **Skipping tests or documentation** "because it's a small change."
+4. **Not running `R CMD check` locally** before pushing.
+5. **Forgetting the dependency chain** — changes to `posterior` can break `bayesplot`, `loo`, `cmdstanr`, and `rstanarm`.
+6. **Going silent after submitting** — even a quick "will address this weekend" keeps the PR alive.
+
+See [how-to-contribute-stan-r-packages.md](how-to-contribute-stan-r-packages.md) for the full checklist and pitfalls list.
+:::
+
+## Key takeaway
+
+Start small: a documentation fix or `good-first-issue` bug is a legitimate first contribution. Build trust before attempting cross-package changes.

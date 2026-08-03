@@ -1,0 +1,27 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Contributing to Stan"
+  author: "Florence Bockting"
+  date: today
+  chapters:
+    - index.qmd
+    - 01-what-is-stan.qmd
+    - 02-how-to-contribute.qmd
+    - 02-ecosystem.qmd
+    - 03-contributing.qmd
+    - 04-hands-on.qmd
+
+format:
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+    code-fold: false
+
+execute:
+  echo: true
+  eval: true
+  freeze: auto

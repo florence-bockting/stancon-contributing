@@ -1,0 +1,19 @@
+project:
+  type: default
+  output-dir: _slides
+
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
+    theme: default
+    css: slides.css
+    footer: "StanCon 2026 - Tutorial on Contributing to Stan"
+    logo: img/stan_logo.png
+    link-external-newwindow: true
+    include-after-body: includes/_section-label.html
+
+execute:
+  echo: true
+  eval: true
+  freeze: auto

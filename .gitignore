@@ -1,0 +1,10 @@
+/_book/
+/_slides/
+/_freeze/
+/.quarto/
+main.html
+main_files/
+*-slides.html
+*.ipynb
+
+**/*.quarto_ipynb

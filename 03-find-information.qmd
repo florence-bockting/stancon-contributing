@@ -1,0 +1,117 @@
+---
+format:
+  revealjs:
+    output-file: 03-find-information.html
+    incremental: true
+    mermaid-format: svg
+---
+
+# Where to find information?
+
+## Different layers of documentation
++ different layers of documentation
++ mental model following the [Diátaxis](https://diataxis.fr/) framework:
+
+::: {.fragment}
+| Type | Focus | Stan examples |
+| :---- | :----- | :------------ |
+| Reference | what | Function/package index, Stan math docs, Stan reference manual |
+| How-to guides | solve my problem | Vignettes, case studies |
+| Tutorials | learn by doing | User's Guide walkthroughs, example-models |
+| Explanation | why it's designed this way | Wiki, discussions on Discourse |
+:::
+
+---
+
+### Short primer: R workflow
+
+```{r}
+#| eval: false
+
+library(cmdstanr)
+library(bayesplot)
+library(loo)
+library(brms)
+
+stan_code <- "
+data {
+  int<lower=0> N;
+  vector[N] y;
+}
+parameters {
+  real mu;
+  real<lower=0> sigma;
+}
+model {
+  mu ~ normal(0, 10);      // prior
+  sigma ~ exponential(1);  // prior
+  target += normal_lpdf(y | mu, sigma);  // likelihood
+}
+"
+writeLines(stan_code, "model.stan")
+mod <- cmdstanr::cmdstan_model("model.stan")
+
+stan_data <- list(N = 20, y = rnorm(20, mean = 5, sd = 2))
+fit <- mod$sample(data = stan_data, chains = 4, iter_sampling = 1000)
+draws <- fit$draws(variables = c("mu", "sigma"))
+
+bayesplot::mcmc_trace(draws)
+loo::loo(brms::log_lik(fit))
+```
+
+---
+
+### Reference ("What")
+
++ *"What counts as a valid Stan program? What are blocks, types, and constraints, and how do they behave?"*
+  - see [Stan reference manual](https://mc-stan.org/docs/2_39/reference-manual/)
+  - grammar/rules of the Stan language
+  - analogous to a grammar book
++ *"What does `normal_lpdf` do, and what arguments/types does it expect?"*
+  - see [Functions reference](https://mc-stan.org/docs/2_39/functions-reference/)
+  - built-in vocabulary of the Stan language
+  - analogous to a dictionary
++ *"What does `loo()` in the loo R package do, and what arguments does it take?"*
+  - see Package index (API) of corresponding downstream package
+  - Examples: [loo](https://mc-stan.org/loo/reference/index.html), [ShinyStan](https://mc-stan.org/shinystan/)
+  - Analogous to a manual for a specific translation tool
+
+---
+
+### How-to guides ("Solve my problem")
+
++ *"How do I fit a Stan model?"*
+  - see [Stan user guide](https://mc-stan.org/docs/2_39/user-guide/index.html)
++ *"How do I plot MCMC draws with bayesplot?"*
+  - see [Vignette in bayesplot](https://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html)
++ *"How do I perform leave-one-out cross validation with loo?"*
+  - see [Vignette in loo](https://mc-stan.org/loo/articles/loo2-example.html)
++ *"How do I estimate multivariate models in brms?"*
+  - see [Vignette in brms](https://paulbuerkner.com/brms/articles/brms_multivariate.html)
++ Etc.
+
+---
+
+### Tutorials ("Learn by doing")
+
++ [Tutorials on Stan](https://mc-stan.org/learn-stan/tutorials.html#tutorials)
++ Case Studies:
+  - [Stan website](https://mc-stan.org/learn-stan/case-studies.html)
+  - [Bayesian Workflow book](https://avehtari.github.io/Bayesian-Workflow/casestudies.html)
+  - on [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
++ Published papers
+  - [posterior: Tools for Working with Posterior Distributions in R](https://joss.theoj.org/papers/10.21105/joss.10526)
+  - [brms: An R Package for Bayesian Multilevel Models Using Stan](https://www.jstatsoft.org/article/view/v080i01)
+  - [Visualization in Bayesian workflow](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378)
+  - etc.
+
+### Explanation ("Why it's designed this way")
+
++ *"Why is Stan designed this way?"*
+  - see [Discourse discussions](https://discourse.mc-stan.org)
+  - see [Wiki](https://github.com/stan-dev/stan/wiki)
+
+---
+
+### Note about design review
+https://github.com/stan-dev/design-docs

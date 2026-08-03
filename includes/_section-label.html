@@ -1,0 +1,39 @@
+<script>
+  // Show the parent level-1 section title at top-left, aligned with the slide number.
+  // Hidden on the section intro / title slide itself.
+  (function () {
+    var reveal = document.querySelector(".reveal");
+    if (!reveal || typeof Reveal === "undefined") return;
+
+    var label = document.createElement("div");
+    label.className = "section-label";
+    label.style.visibility = "hidden";
+    reveal.appendChild(label);
+
+    function sectionTitleFor(slide) {
+      if (!slide || !slide.classList.contains("level2")) return "";
+      var stack = slide.parentElement;
+      if (!stack) return "";
+      var h1 = stack.querySelector(":scope > section.level1 h1");
+      return h1 ? h1.textContent.trim() : "";
+    }
+
+    function update(slide) {
+      var title = sectionTitleFor(slide);
+      if (title) {
+        label.textContent = title;
+        label.style.visibility = "visible";
+      } else {
+        label.textContent = "";
+        label.style.visibility = "hidden";
+      }
+    }
+
+    Reveal.on("ready", function (event) {
+      update(event.currentSlide);
+    });
+    Reveal.on("slidechanged", function (event) {
+      update(event.currentSlide);
+    });
+  })();
+</script>

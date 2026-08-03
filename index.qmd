@@ -1,0 +1,45 @@
+# Welcome {.unnumbered}
+
+StanCon 2026 tutorial on contributing to the Stan ecosystem.
+
+## Goals
+
+By the end of this workshop you should be able to:
+
++ Explain what Stan is and how the ecosystem is organized
++ Identify which repository matches your skills and interests
++ Follow the contribution workflow for Stan's R packages
++ Make a small, reviewable first contribution
+
+## Prerequisites
+
++ Basic familiarity with Bayesian modeling (helpful but not required)
++ Comfort with either R or Python for the hands-on section
++ A GitHub account
+
+## How to use these materials
+
+This repository is a **Quarto book**. The same section files render as:
+
+| Command | Output |
+|---------|--------|
+| `quarto render` | Full HTML book in `_book/` (notebook/handout) |
+| `quarto render --profile slides 02-ecosystem.qmd` | RevealJS slides for one section in `_slides/` |
+
+Each chapter file can be rendered on its own for presenting a single session:
+
+```bash
+quarto render --profile slides 02-ecosystem.qmd
+```
+
+## Sections
+
+1. [What is Stan?](01-what-is-stan.qmd)
+2. [The Stan ecosystem](02-ecosystem.qmd)
+3. [How to contribute](03-contributing.qmd)
+4. [Hands-on exercise](04-hands-on.qmd)
+
+Longer reference guides live alongside the book:
+
++ [stan-ecosystem-guide.md](stan-ecosystem-guide.md)
++ [how-to-contribute-stan-r-packages.md](how-to-contribute-stan-r-packages.md)

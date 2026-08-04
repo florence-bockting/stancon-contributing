@@ -4,15 +4,15 @@ project:
 
 book:
   title: "Contributing to Stan"
+  subtitle: "A Developer’s Guide to the Core, Interfaces, and First Contributions"
   author: "Florence Bockting"
   date: today
   chapters:
     - index.qmd
     - 01-what-is-stan.qmd
     - 02-how-to-contribute.qmd
-    - 02-ecosystem.qmd
-    - 03-contributing.qmd
-    - 04-hands-on.qmd
+    - 03-find-information.qmd
+    - 05-checklist.qmd
 
 format:
   html:
@@ -20,6 +20,7 @@ format:
     number-sections: true
     embed-resources: true
     code-fold: false
+    css: book.css
 
 execute:
   echo: true

@@ -1,0 +1,200 @@
+/* StanCon book HTML — shared palette with slides.css */
+
+:root {
+  /* Palette from stan_logo.png: circle blue, ribbon cream, ribbon navy */
+  --stan-blue: #2E7FB0;
+  --stan-blue-dark: #052744;
+  --stan-blue-light: #5AA3C9;
+  --stan-logo-blue: #3080B0;
+  --stan-logo-shadow: #002040;
+  --stan-cream: #F5E8C9;
+  --stan-slate: #4A5560;
+  --stan-slate-light: #7A8490;
+  --stan-rule: #B8C0C8;
+  --stan-bg: color-mix(in srgb, #F2E5BD 10%, #ffffff);
+
+  /* Bootstrap / Quarto theme hooks */
+  --bs-primary: var(--stan-logo-blue);
+  --bs-link-color: var(--stan-blue);
+  --bs-link-hover-color: var(--stan-blue-dark);
+  --bs-body-bg: var(--stan-bg);
+  --bs-body-color: var(--stan-slate);
+}
+
+body {
+  background-color: var(--stan-bg);
+  color: var(--stan-slate);
+}
+
+/* Headings — mirror slide hierarchy */
+h1,
+.quarto-title-block .title {
+  color: var(--stan-blue);
+  border-bottom: 2px solid var(--stan-blue);
+  padding-bottom: 0.25em;
+}
+
+h2 {
+  color: var(--stan-blue-dark);
+  border-bottom: 2px solid var(--stan-rule);
+  padding-bottom: 0.25em;
+}
+
+h3,
+h4 {
+  color: var(--stan-slate);
+}
+
+/* Content links */
+#quarto-content a,
+main.content a {
+  color: var(--stan-blue);
+}
+
+#quarto-content a:hover,
+main.content a:hover {
+  color: var(--stan-blue-dark);
+}
+
+/* Highlight span used in chapters */
+.hl {
+  color: var(--stan-blue-light);
+  font-weight: 700;
+}
+
+/* Callouts: logo-blue header, cream title, transparent body */
+div.callout.callout-note,
+div.callout.callout-important,
+div.callout.callout-tip,
+div.callout.callout-warning,
+div.callout.callout-caution {
+  border-left-color: var(--stan-logo-blue);
+  background-color: transparent;
+}
+
+div.callout.callout-style-default > .callout-header {
+  background-color: var(--stan-logo-blue);
+  color: var(--stan-cream);
+}
+
+/* Book HTML uses .callout-title-container; slides use .callout-title */
+div.callout.callout-style-default .callout-header,
+div.callout.callout-style-default .callout-title-container,
+div.callout.callout-style-default .callout-title,
+div.callout.callout-style-default .callout-title p,
+div.callout.callout-style-default .callout-title strong {
+  color: var(--stan-cream) !important;
+}
+
+div.callout.callout-note .callout-icon::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+}
+
+div.callout.callout-important .callout-icon::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-exclamation-triangle" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .044.017.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg>');
+}
+
+/* Sidebar / TOC accents */
+.sidebar nav .nav-link.active,
+.sidebar nav .nav-link:hover,
+#quarto-sidebar .sidebar-item .sidebar-link.active,
+#quarto-margin-sidebar .nav-link.active,
+#toc-title {
+  color: var(--stan-logo-blue);
+}
+
+.sidebar.sidebar-navigation,
+#quarto-sidebar {
+  background-color: color-mix(in srgb, var(--stan-bg) 85%, #ffffff);
+  border-right-color: var(--stan-rule);
+}
+
+/* Primary buttons / badges */
+.btn-primary,
+.nav-pills .nav-link.active {
+  background-color: var(--stan-logo-blue);
+  border-color: var(--stan-logo-blue);
+}
+
+.btn-primary:hover {
+  background-color: var(--stan-blue-dark);
+  border-color: var(--stan-blue-dark);
+}
+
+/* Tables — light Stan rules */
+table thead {
+  border-top: 2px solid var(--stan-blue);
+}
+
+table thead th {
+  border-bottom: 2px solid var(--stan-rule);
+  color: var(--stan-blue-dark);
+}
+
+/* Index page: Stan logo with layered watermark shadow (mirrors slides) */
+:root {
+  --stan-logo-size: 8rem;
+}
+
+.stan-logo-hero {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: calc(var(--stan-logo-size) * 1.35);
+  margin: 0 0 1rem 0;
+  pointer-events: none;
+}
+
+.stan-logo-hero::before,
+.stan-logo-hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background-image: url("img/stan_logo_watermark.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Outer shadow layer */
+.stan-logo-hero::before {
+  right: -0.45rem;
+  bottom: -0.55rem;
+  width: calc(var(--stan-logo-size) * 2.15);
+  height: calc(var(--stan-logo-size) * 2.15);
+  opacity: 0.035;
+}
+
+/* Mid watermark layer */
+.stan-logo-hero::after {
+  right: 0.15rem;
+  bottom: 0.05rem;
+  width: calc(var(--stan-logo-size) * 1.55);
+  height: calc(var(--stan-logo-size) * 1.55);
+  opacity: 0.07;
+}
+
+.stan-logo-hero img.stan-logo,
+.stan-logo-hero img {
+  position: relative;
+  z-index: 1;
+  width: var(--stan-logo-size);
+  height: auto;
+  max-width: none;
+  margin: 0;
+}
+
+.stan-logo-hero p,
+.stan-logo-hero .figure,
+.stan-logo-hero figure {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+@media screen and (max-width: 700px) {
+  :root {
+    --stan-logo-size: 5rem;
+  }
+}

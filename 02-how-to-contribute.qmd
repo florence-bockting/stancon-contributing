@@ -15,18 +15,18 @@ You [don't]{.hl} need to be a professional software developer or statistician in
 ## Types of contributions
 There are many ways to contribute to Stan, including:
 
-- [asking and answering questions]{.hl} of users on [Discourse](https://discourse.mc-stan.org)
-- [reporting problems]{.hl} when interacting with the software or documentation
-- [requesting new features]{.hl} or improvements
-- providing [feedback on documentation]{.hl}
-- contributing with a [case study]{.hl} of your specific research field
-- contributing [code]{.hl}
+- [asking and answering questions](#sec-participate-in-stan-discourse) on [Stan Discourse](https://discourse.mc-stan.org)
+- [reporting problems](#sec-issues-bug-report) when interacting with the software or documentation
+- [requesting new features](#sec-issues-feature-request) or improvements
+- providing [feedback on documentation](#sec-feedback-on-documentation)
+- contributing with a [case study](#sec-contributing-tutorial) of your specific research field
+- contributing [code](#sec-contributing-code)
 
 ---
 
 ## Typical workflows for contributing
 
-### Participate in the Stan Discourse
+### Participate in the Stan Discourse {#sec-participate-in-stan-discourse}
 
 - [Discourse](https://discourse.mc-stan.org) is the main forum for users and
 developers to ask questions, discuss issues, and share ideas.
@@ -36,9 +36,9 @@ developers to ask questions, discuss issues, and share ideas.
 
 ---
 
-### Feature requests and bug reports
+### Feature requests and bug reports {#sec-feature-requests-and-bug-reports}
 
-- Go to the GitHub repository ![](img/github_logo.png){width="2%"} of interest
+- Go to the GitHub repository ![](img/github_logo.png){width="3%"} of interest
 - Get familiar with Issues and PRs ([Example: loo](https://github.com/stan-dev/loo/issues))
 - For new contributors: 
   + check for labels like "help wanted" or "good first issue"
@@ -50,10 +50,8 @@ developers to ask questions, discuss issues, and share ideas.
 
 ---
 
-### Feature requests and bug reports
-
 ::: {.callout-note}
-## Writing good Issues: Bug Report
+## Writing good Issues: Bug Report {#sec-issues-bug-report}
 
 + Title: One sentence, specific, searchable.
 + Body
@@ -70,10 +68,8 @@ developers to ask questions, discuss issues, and share ideas.
 
 ---
 
-### Feature requests and bug reports
-
 ::: {.callout-note}
-## Writing good Issues: Feature Request
+## Writing good Issues: Feature Request {#sec-issues-feature-request}
 
 + Title: One sentence, specific, searchable.
 + Body
@@ -85,9 +81,13 @@ developers to ask questions, discuss issues, and share ideas.
   + [bayesplot](https://github.com/stan-dev/bayesplot/issues/73)
 :::
 
+Additional references:
+
++ reprex package: https://reprex.tidyverse.org/
+
 ---
 
-### Feedback on documentation
+### Feedback on documentation {#sec-feedback-on-documentation}
 
 - unclear documentation
 - contribute with new case study or tutorial in your field
@@ -95,38 +95,79 @@ developers to ask questions, discuss issues, and share ideas.
 - let us know if something is missing
 - typos, etc.
 
+### Contributing a case study or tutorial {#sec-contributing-tutorial}
+
+- TODO
+
 ---
 
-### Contributing Code
+### Contributing Code {#sec-contributing-code}
 
-#### Opening a PR
-
-- some packages have templates others don't
+Some packages have templates others don't, but overall a good PR description should incorporate the following information:
 
 ::: {.callout-note}
-## Writing good PRs
+## Writing a good PR description
 
-Before you start:
-+ [x] Have you read the contributing guidelines?
-+ [x] Have you read the [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)?
-+ [x] Are you aware of the Code of Conduct?
-For contributing to Stan core libraries:
-+ [x] Have you checked the[Developer Wiki](https://github.com/stan-dev/stan/wiki)?
+**Before you start:**
+
++ Have you read the contributing guidelines? (see GitHub repository)
++ Have you read the [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)?
++ For contributing to Stan core libraries (e.g. `stan`, `math`, `stanc3`):
+  + Have you checked the [Developer Wiki](https://github.com/stan-dev/stan/wiki)?
++ Keep the PR small and focused on one logical change
++ Not ready for review yet? Open it as a **Draft PR** so reviewers know to hold off.
 
 **Title:** One sentence, specific, searchable.
-**Body:**
-+ [x] Link PR to Issue via [GitHub keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) like `Fixes #123` or `Closes #123`
-+ [x] What has been changed and why?
-+ [x] (if applicable) Have you added tests and do they pass?
-+ [x] (if applicable) Have you added documentation?
-+ [x] (if applicable) In case you provided a new vignette, have rendered it locally?
-+ [x] Have you ensured that you follow the style of the existing code/docs?
-+ [x] Are there any uncertainties or open questions?
-+ [x] For transparency: Disclose if you used an AI assistant and commit that you reviewed the changes critically.
 
-**Examples:** 
++ Good: `Fix incorrect ESS calculation for thinned chains`
++ Avoid: `Bug fix`
+
+:::
+
+---
+
+::: {.callout-note}
+## Writing a good PR description (continued I)
+
+**Body:**
+
++ Link PR to Issue via [GitHub keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) like `Fixes #123` or `Closes #123`
+
+*Description*
+
++ Describe what has been changed and why.
++ Be concise and use your own words (try to avoid using AI-generated text).
++ Add any uncertainties or open questions you have here as well.
+
+*Breaking changes*: Does this PR change existing behavior, APIs, or output? If yes, describe the impact.
+
+*Tests*: (if applicable) Which tests have you added?
+
+*Documentation / Vignettes*: (if applicable) Have you added documentation?
+
+:::
+
+---
+
+::: {.callout-note}
+## Writing a good PR description (continued II)
+
+*Checklist*
+
++ style is consistent with existing code/docs
++ documentation/vignette is rendered locally
++ tests and `devtools::check()` pass
++ AI-assisted development: Disclose if you used an AI assistant and commit that you reviewed the changes critically.
++ `NEWS.md` entry added
++ see our detailed [checklist](#)
+
+*TODOs*: List any remaining tasks you need to complete before the PR is ready to be merged.
+
+**Examples:**
+
 + [bayesplot](https://github.com/stan-dev/bayesplot/issues/425)
 + [brms](https://github.com/paul-buerkner/brms/issues/1899)
+
 :::
 
 ---
@@ -138,123 +179,3 @@ For contributing to Stan core libraries:
 + Review all changes made by an AI assistant critically and ask yourself:
   - Is this change correct? Do I need this change? Is this change in the scope of the PR?
 + When in doubt about something, ask rather the Stan developers than the AI assistant
-
----
-
-## Where to find information 
-
-+ different layers of documentation
-+ mental model following the [Diátaxis](https://diataxis.fr/) framework:
-
-::: {.fragment}
-| Type | Focus | Stan examples |
-| :---- | :----- | :------------ |
-| Reference | what | Function/package index, Stan math docs, Stan reference manual |
-| How-to guides | solve my problem | Vignettes, case studies |
-| Tutorials | learn by doing | User's Guide walkthroughs, example-models |
-| Explanation | why it's designed this way | Wiki, discussions on Discourse |
-:::
-
----
-
-#### Short primer: R workflow
-
-```{r}
-#| eval: false
-
-library(cmdstanr)
-library(bayesplot)
-library(loo)
-library(brms)
-
-stan_code <- "
-data {
-  int<lower=0> N;
-  vector[N] y;
-}
-parameters {
-  real mu;
-  real<lower=0> sigma;
-}
-model {
-  mu ~ normal(0, 10);      // prior
-  sigma ~ exponential(1);  // prior
-  target += normal_lpdf(y | mu, sigma);  // likelihood
-}
-"
-writeLines(stan_code, "model.stan")
-mod <- cmdstanr::cmdstan_model("model.stan")
-
-stan_data <- list(N = 20, y = rnorm(20, mean = 5, sd = 2))
-fit <- mod$sample(data = stan_data, chains = 4, iter_sampling = 1000)
-draws <- fit$draws(variables = c("mu", "sigma"))
-
-bayesplot::mcmc_trace(draws)
-loo::loo(brms::log_lik(fit))
-```
-
----
-
-#### Reference ("What")
-
-+ *"What counts as a valid Stan program? What are blocks, types, and constraints, and how do they behave?"*
-  - see [Stan reference manual](https://mc-stan.org/docs/2_39/reference-manual/)
-  - grammar/rules of the Stan language
-  - analogous to a grammar book
-+ *"What does `normal_lpdf` do, and what arguments/types does it expect?"*
-  - see [Functions reference](https://mc-stan.org/docs/2_39/functions-reference/)
-  - built-in vocabulary of the Stan language
-  - analogous to a dictionary
-+ *"What does `loo()` in the loo R package do, and what arguments does it take?"*
-  - see Package index (API) of corresponding downstream package
-  - Examples: [loo](https://mc-stan.org/loo/reference/index.html), [ShinyStan](https://mc-stan.org/shinystan/)
-  - Analogous to a manual for a specific translation tool
-
----
-
-#### How-to guides ("Solve my problem")
-
-+ *"How do I fit a Stan model?"*
-  - see [Stan user guide](https://mc-stan.org/docs/2_39/user-guide/index.html)
-+ *"How do I plot MCMC draws with bayesplot?"*
-  - see [Vignette in bayesplot](https://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html)
-+ *"How do I perform leave-one-out cross validation with loo?"*
-  - see [Vignette in loo](https://mc-stan.org/loo/articles/loo2-example.html)
-+ *"How do I estimate multivariate models in brms?"*
-  - see [Vignette in brms](https://paulbuerkner.com/brms/articles/brms_multivariate.html)
-+ Etc.
-
----
-
-#### Tutorials ("Learn by doing")
-
-+ [Tutorials on Stan](https://mc-stan.org/learn-stan/tutorials.html#tutorials)
-+ Case Studies:
-  - [Stan website](https://mc-stan.org/learn-stan/case-studies.html)
-  - [Bayesian Workflow book](https://avehtari.github.io/Bayesian-Workflow/casestudies.html)
-  - on [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
-+ Published papers
-  - [posterior: Tools for Working with Posterior Distributions in R](https://joss.theoj.org/papers/10.21105/joss.10526)
-  - [brms: An R Package for Bayesian Multilevel Models Using Stan](https://www.jstatsoft.org/article/view/v080i01)
-  - [Visualization in Bayesian workflow](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378)
-  - etc.
-
-#### Explanation ("Why it's designed this way")
-
-+ *"Why is Stan designed this way?"*
-  - see [Discourse discussions](https://discourse.mc-stan.org)
-  - see [Wiki](https://github.com/stan-dev/stan/wiki)
-
----
-
-
-#### Note about design review
-https://github.com/stan-dev/design-docs
-
-## Before you start
-
-+ read [Code of Conduct](https://mc-stan.org/code-of-conduct.html)
-+ Contributing to Stan core libraries
-  - see [Developer Wiki](https://github.com/stan-dev/stan/wiki)
-+ Contributing to downstream packages
-  - see README.md and contributing guidelines in respective GitHub repository

@@ -1,0 +1,79 @@
+---
+format:
+  revealjs:
+    output-file: 05-checklist-slides.html
+---
+
+# Checklist (Contributing to R packages)
++ [x] **Getting started** 
+  + [x] Check open issues or open a new one to discuss your proposed change before
+starting significant work (for bigger changes; typo/doc fixes can skip this)
+  + [x] Check the repository for a `CONTRIBUTING.md` with package-specific guidance
+
++ [x] **AI contribution policy**
+  + [x] if you used AI tools (e.g. Claude, ChatGPT, GitHub Copilot) to help write
+  your contribution, review the Stan project's
+  [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)
+  before opening a PR
+  + [x] disclose AI assistance in your PR description if the policy requires it
+  + you remain responsible for understanding, testing, and being able to explain
+  any AI-generated code you submit
+
++ [x] **Fork and clone**
+  + raw git: fork on GitHub, then
+  `git clone https://github.com/your-username/repository-name.git`
+  + usethis: `usethis::create_from_github("stan-dev/repository-name", fork = TRUE)`
+
++ [x] **Create a branch for your changes**
+  + raw git: start from the main/master branch:
+  `git checkout -b fix/123-short-description`
+  + usethis: `usethis::pr_init("brief-description-of-change")`
+
++ [x] **Make your changes on this branch**
+  + [x] keep your branch up to date with upstream
+  + [x] install development dependencies `devtools::install_dev_deps()`
+  + debug with `devtools::load_all()` and `debug(new_function)`
+  + if you add a new function:
+    + [x] add tests and run them with `testthat::test_file()` or
+    `testthat::test_dir()`
+    + [x] add documentation to new functions and examples
+    + [x] render the documentation with `devtools::document()`
+  + if you add a new vignette:
+    + [x] ensure vignette is rendered locally with `devtools::build_vignettes()`
+  + ensure you follow the style of the existing code/docs
+
++ [x] **Contributing or changing plots (bayesplot in particular)**
+  + bayesplot uses [`vdiffr`](https://vdiffr.r-lib.org/) for visual regression
+  testing. In visual regression testing plots are compared against reproducible
+  SVG snapshots rather than just checked for errors
+  + [x] for any new plotting function or a change to an existing plot's appearance,
+  add a graphical test using
+  `vdiffr::expect_doppelganger("descriptive-title", plot_object)` in the
+  relevant test file
+  + [x] run `devtools::test()`, new or changed snapshots will be flagged
+  + [x] review flagged snapshots with `testthat::snapshot_review()`, which opens an
+  interactive Shiny app showing old vs. new SVG side by side
+  + only accept a snapshot change if the visual difference is the one you
+  intended
+
++ [x] **Update NEWS.md**
+  + [x] add a bullet for your change, placed just below the first header in NEWS.md
+  + follow the existing formatting and tone used in that file (check recent
+  entries for the convention)
+
++ [x] Add and commit your changes in reasonable chunks `git add <files>` and
+`git commit -m "short description of your changes"`
+  + [cheatsheet](https://www.bavaga.com/blog/2025/01/27/my-ultimate-conventional-commit-types-cheatsheet/) for conventional git
+  commit types
+
++ [x] **Finalize your changes**
+  + [x] run the full test suite with `devtools::test()`
+  + [x] run the full check with `devtools::check()`
+  + [x] push your branch
+    + raw git: `git push origin fix/123-short-description`
+    + usethis: `usethis::pr_push()` (opens the PR flow in your browser for you)
+
++ [x] **Open a PR** 
+  + add a detailed description of your changes (see 
+  [How to write a good PR description]())
+  + expect CI to run additional checks automatically

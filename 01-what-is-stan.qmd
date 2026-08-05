@@ -36,7 +36,7 @@ We communicate via:
 
 ![](img/stan_libraries.png){width="60%" fig-align="center" .nostretch}
 
-More on this later!
+More on this [later](#sec-stan-ecosystem)!
 
 ## A probabilistic programming language {#sec-probabilistic-programming-language}
 

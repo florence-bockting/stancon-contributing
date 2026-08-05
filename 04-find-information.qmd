@@ -1,7 +1,7 @@
 ---
 format:
   revealjs:
-    output-file: 03-find-information.html
+    output-file: 04-find-information-slides.html
     incremental: true
     mermaid-format: svg
 ---
@@ -23,51 +23,13 @@ format:
 
 ---
 
-### Short primer: R workflow
-
-```{r}
-#| eval: false
-
-library(cmdstanr)
-library(bayesplot)
-library(loo)
-library(brms)
-
-stan_code <- "
-data {
-  int<lower=0> N;
-  vector[N] y;
-}
-parameters {
-  real mu;
-  real<lower=0> sigma;
-}
-model {
-  mu ~ normal(0, 10);      // prior
-  sigma ~ exponential(1);  // prior
-  target += normal_lpdf(y | mu, sigma);  // likelihood
-}
-"
-writeLines(stan_code, "model.stan")
-mod <- cmdstanr::cmdstan_model("model.stan")
-
-stan_data <- list(N = 20, y = rnorm(20, mean = 5, sd = 2))
-fit <- mod$sample(data = stan_data, chains = 4, iter_sampling = 1000)
-draws <- fit$draws(variables = c("mu", "sigma"))
-
-bayesplot::mcmc_trace(draws)
-loo::loo(brms::log_lik(fit))
-```
-
----
-
 ### Reference ("What")
 
 + *"What counts as a valid Stan program? What are blocks, types, and constraints, and how do they behave?"*
   - see [Stan reference manual](https://mc-stan.org/docs/2_39/reference-manual/)
   - grammar/rules of the Stan language
   - analogous to a grammar book
-+ *"What does `normal_lpdf` do, and what arguments/types does it expect?"*
++ *"What does `normal_lpdf` in `stan_code` do, and what arguments/types does it expect?"*
   - see [Functions reference](https://mc-stan.org/docs/2_39/functions-reference/)
   - built-in vocabulary of the Stan language
   - analogous to a dictionary
@@ -92,17 +54,18 @@ loo::loo(brms::log_lik(fit))
 
 ---
 
-### Tutorials ("Learn by doing")
+### Tutorials / Case Studies ("Learn by doing")
 
 + [Tutorials on Stan](https://mc-stan.org/learn-stan/tutorials.html#tutorials)
 + Case Studies:
   - [Stan website](https://mc-stan.org/learn-stan/case-studies.html)
   - [Bayesian Workflow book](https://avehtari.github.io/Bayesian-Workflow/casestudies.html)
-  - on [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
+  - [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
 + Published papers
   - [posterior: Tools for Working with Posterior Distributions in R](https://joss.theoj.org/papers/10.21105/joss.10526)
   - [brms: An R Package for Bayesian Multilevel Models Using Stan](https://www.jstatsoft.org/article/view/v080i01)
-  - [Visualization in Bayesian workflow](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378)
+  - [Visualization in Bayesian workflow (bayesplot)](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378)
+  - [ArviZ: a modular and flexible library for exploratory analysis of Bayesian models](https://joss.theoj.org/papers/10.21105/joss.09889)
   - etc.
 
 ### Explanation ("Why it's designed this way")

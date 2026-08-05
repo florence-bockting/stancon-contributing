@@ -1,7 +1,7 @@
 ---
 format:
   revealjs:
-    output-file: 02-how-to-contribute.html
+    output-file: 03-how-to-contribute-slides.html
     incremental: true
     mermaid-format: svg
 ---
@@ -28,7 +28,7 @@ There are many ways to contribute to Stan, including:
 
 ### Participate in the Stan Discourse {#sec-participate-in-stan-discourse}
 
-- [Discourse](https://discourse.mc-stan.org) is the main forum for users and
+- [Stan Discourse](https://discourse.mc-stan.org) is the main forum for users and
 developers to ask questions, discuss issues, and share ideas.
 - we want a friendly and welcoming environment
   + [Code of Conduct](https://mc-stan.org/code-of-conduct.html)
@@ -38,15 +38,15 @@ developers to ask questions, discuss issues, and share ideas.
 
 ### Feature requests and bug reports {#sec-feature-requests-and-bug-reports}
 
-- Go to the GitHub repository ![](img/github_logo.png){width="3%"} of interest
-- Get familiar with Issues and PRs ([Example: loo](https://github.com/stan-dev/loo/issues))
-- For new contributors: 
+- go to the GitHub repository ![](img/github_logo.png){width="3%"} of interest
+- get familiar with Issues and PRs ([Example: loo](https://github.com/stan-dev/loo/issues))
+- for [new contributors]{.hl}
   + check for labels like "help wanted" or "good first issue"
   + avoid working on issues that incorporate refactoring or larger changes
   + when in doubt, ask in the issue whether it's a good idea to work on it
-- Open a new Issue
-  + Check first whether the issue already exists
-  + Some tips for writing good Issues...
+- open a [new Issue]{.hl}
+  + check first whether the issue already exists (avoid duplicates)
+  + some tips for writing good Issues...
 
 ---
 
@@ -81,23 +81,82 @@ developers to ask questions, discuss issues, and share ideas.
   + [bayesplot](https://github.com/stan-dev/bayesplot/issues/73)
 :::
 
-Additional references:
+::: {.fragment}
+**Additional references:**
 
-+ reprex package: https://reprex.tidyverse.org/
++ [Mozilla's guide](https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html) to writing good bug reports
++ ["How to Report Bugs Effectively"](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html) by Simon Tatham
++ R package ["reprex" (tidyverse)](https://reprex.tidyverse.org/): runs your code, captures output, and formats it (code + results) as ready-to-paste Markdown for GitHub issues
+
+:::
 
 ---
 
 ### Feedback on documentation {#sec-feedback-on-documentation}
 
-- unclear documentation
-- contribute with new case study or tutorial in your field
-- improve existing documentation
-- let us know if something is missing
-- typos, etc.
+- clarifying confusing sections
+- adding examples/code snippets
+- fixing inaccuracies (e.g., when current behavior deviates from the documented behavior)
+- let us know if something is missing or unclear
+- fixing typos, grammar, broken links
+
+---
 
 ### Contributing a case study or tutorial {#sec-contributing-tutorial}
 
-- TODO
+- list of [case studies in Stan](https://mc-stan.org/learn-stan/case-studies.html)
+- blog post by Bob Carpenter on [expanding the Stan Users Guide](https://statmodeling.stat.columbia.edu/2026/05/04/expanding-the-stan-users-guide/)
+
+::: {.fragment}
+::: {.callout-note}
+
+## Checklist for contributing a case study 
+
+::: {.fragment}
+**1. Initial contact**
+
+  + post on the [Stan Discourse](https://discourse.mc-stan.org) to reach the team
+  + post case study or tutorial idea in the [Stan Discourse](https://discourse.mc-stan.org) first
+:::
+
+::: {.fragment}
+**2. Content requirements**
+
+  + write it as a narrative document, not just code
+  + use a reproducible-notebook format
+  + note exact software and compiler versions used
+  + fix random seeds so results are exactly reproducible
+:::
+
+:::
+:::
+
+---
+
+::: {.callout-note}
+
+## Checklist for contributing a case study (continued)
+::: {.fragment}
+**3. Licensing**
+
+  + license code under an open source license (e.g., BSD or GPL)
+  + license text as Creative Commons (CC-BY is most common)
+  + author retains copyright (but Stan needs to be permitted to host and redistribute)
+:::
+
+::: {.fragment}
+**4. Metadata for published case study**
+
+  + Title
+  + Author(s) (and optional affiliation)
+  + Short abstract/description (in 2-4 sentences, what problem is solved and why it matters)
+  + Keywords (3-6 terms for discoverability)
+  + Source repository link (e.g., a public GitHub repo containing the actual notebook/knitr source, separate from the rendered HTML)
+  + Dependencies list (package/library versions used)
+  + Rendered HTML version (the actual output others will read)
+
+:::
+:::
 
 ---
 
@@ -105,9 +164,10 @@ Additional references:
 
 Some packages have templates others don't, but overall a good PR description should incorporate the following information:
 
+::: {.fragment}
 ::: {.callout-note}
 ## Writing a good PR description
-
+::: {.fragment}
 **Before you start:**
 
 + Have you read the contributing guidelines? (see GitHub repository)
@@ -117,41 +177,50 @@ Some packages have templates others don't, but overall a good PR description sho
 + Keep the PR small and focused on one logical change
 + Not ready for review yet? Open it as a **Draft PR** so reviewers know to hold off.
 
+:::
+
+::: {.fragment}
 **Title:** One sentence, specific, searchable.
 
 + Good: `Fix incorrect ESS calculation for thinned chains`
 + Avoid: `Bug fix`
 
 :::
+:::
+:::
 
 ---
 
 ::: {.callout-note}
 ## Writing a good PR description (continued I)
-
+::: {.fragment}
 **Body:**
 
 + Link PR to Issue via [GitHub keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) like `Fixes #123` or `Closes #123`
-
+:::
+::: {.fragment}
 *Description*
 
 + Describe what has been changed and why.
 + Be concise and use your own words (try to avoid using AI-generated text).
 + Add any uncertainties or open questions you have here as well.
-
+:::
+::: {.fragment}
 *Breaking changes*: Does this PR change existing behavior, APIs, or output? If yes, describe the impact.
-
+:::
+::: {.fragment}
 *Tests*: (if applicable) Which tests have you added?
-
+:::
+::: {.fragment}
 *Documentation / Vignettes*: (if applicable) Have you added documentation?
-
+:::
 :::
 
 ---
 
 ::: {.callout-note}
 ## Writing a good PR description (continued II)
-
+::: {.fragment}
 *Checklist*
 
 + style is consistent with existing code/docs
@@ -159,15 +228,18 @@ Some packages have templates others don't, but overall a good PR description sho
 + tests and `devtools::check()` pass
 + AI-assisted development: Disclose if you used an AI assistant and commit that you reviewed the changes critically.
 + `NEWS.md` entry added
-+ see our detailed [checklist](#)
-
++ see our detailed [checklist](#sec-checklist)
+:::
+::: {.fragment}
 *TODOs*: List any remaining tasks you need to complete before the PR is ready to be merged.
-
+:::
+::: {.fragment}
 **Examples:**
 
 + [bayesplot](https://github.com/stan-dev/bayesplot/issues/425)
 + [brms](https://github.com/paul-buerkner/brms/issues/1899)
 
+:::
 :::
 
 ---

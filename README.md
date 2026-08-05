@@ -5,7 +5,7 @@ Workshop materials for learning how to contribute to the Stan ecosystem. Content
 ## Prerequisites
 
 - [Quarto](https://quarto.org/docs/get-started/) 1.2 or later
-- For the hands-on section: R with `devtools` (optional during render; required to run exercises)
+- R (optional for render; useful when following the R-package contribution checklist with `devtools`)
 
 Check your installation:
 
@@ -16,14 +16,17 @@ quarto --version
 ## Project structure
 
 ```
-├── _quarto.yml              # Book config (default)
-├── _quarto-slides.yml       # Slides profile (RevealJS)
-├── index.qmd                # Welcome page
-├── 01-what-is-stan.qmd      # Section 1
-├── 02-ecosystem.qmd         # Section 2
-├── 03-contributing.qmd      # Section 3
-├── 04-hands-on.qmd          # Section 4
-└── includes/                # Shared code for exercises
+├── _quarto.yml                 # Book config (default)
+├── _quarto-slides.yml          # Slides profile (RevealJS)
+├── index.qmd                   # Welcome page
+├── 01-what-is-stan.qmd         # What is Stan?
+├── 02-stan-ecosystem.qmd       # The Stan ecosystem
+├── 03-how-to-contribute.qmd    # How to contribute
+├── 04-find-information.qmd     # Where to find information
+├── 05-checklist.qmd            # Contribution checklist
+├── book.css / slides.css       # Styling
+├── img/                        # Logos and figures
+└── includes/                   # Shared slide/setup helpers
 ```
 
 Each `0X-*.qmd` file is the single source for both that section's slides and its chapter in the book.
@@ -46,9 +49,10 @@ RevealJS slides must be rendered with the **slides profile**. The default book p
 
 ```bash
 quarto render --profile slides 01-what-is-stan.qmd
-quarto render --profile slides 02-ecosystem.qmd
-quarto render --profile slides 03-contributing.qmd
-quarto render --profile slides 04-hands-on.qmd
+quarto render --profile slides 02-stan-ecosystem.qmd
+quarto render --profile slides 03-how-to-contribute.qmd
+quarto render --profile slides 04-find-information.qmd
+quarto render --profile slides 05-checklist.qmd
 ```
 
 Output goes to `_slides/`:
@@ -56,9 +60,10 @@ Output goes to `_slides/`:
 | Section file | Slide deck |
 |---|---|
 | `01-what-is-stan.qmd` | `_slides/01-what-is-stan-slides.html` |
-| `02-ecosystem.qmd` | `_slides/02-ecosystem-slides.html` |
-| `03-contributing.qmd` | `_slides/03-contributing-slides.html` |
-| `04-hands-on.qmd` | `_slides/04-hands-on-slides.html` |
+| `02-stan-ecosystem.qmd` | `_slides/02-stan-ecosystem-slides.html` |
+| `03-how-to-contribute.qmd` | `_slides/03-how-to-contribute-slides.html` |
+| `04-find-information.qmd` | `_slides/04-find-information-slides.html` |
+| `05-checklist.qmd` | `_slides/05-checklist-slides.html` |
 
 Open the `.html` file in a browser to present. Use arrow keys to navigate; press `f` for fullscreen.
 
@@ -66,9 +71,10 @@ Open the `.html` file in a browser to present. Use arrow keys to navigate; press
 
 ```bash
 quarto render --profile slides 01-what-is-stan.qmd \
-               02-ecosystem.qmd \
-               03-contributing.qmd \
-               04-hands-on.qmd
+               02-stan-ecosystem.qmd \
+               03-how-to-contribute.qmd \
+               04-find-information.qmd \
+               05-checklist.qmd
 ```
 
 ## Preview while editing
@@ -82,18 +88,9 @@ quarto preview
 To preview slides for a section:
 
 ```bash
-quarto preview --profile slides 02-ecosystem.qmd
+quarto preview --profile slides 02-stan-ecosystem.qmd
 ```
 
-## Optional: logo
+## Logo
 
-Slide decks reference `img/stan_logo.png`. Add that file if you want the logo on each deck; rendering works without it.
-
-## Reference guides
-
-Longer background material lives in standalone Markdown files:
-
-- [stan-ecosystem-guide.md](stan-ecosystem-guide.md)
-- [how-to-contribute-stan-r-packages.md](how-to-contribute-stan-r-packages.md)
-
-These are not part of the Quarto book render; the chapter `.qmd` files link to them for additional detail.
+Slide decks use `img/stan_logo.png`. Rendering works without it, but the logo is included in this repository.

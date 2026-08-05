@@ -1,0 +1,281 @@
+---
+format:
+  revealjs:
+    output-file: 02-stan-ecosystem-slides.html
+---
+
+# The Stan Ecosystem {#sec-stan-ecosystem}
+
++ understanding Stan as an ecosystem
++ `stan-dev` is a GitHub organization that contains many repositories that work together at different levels
+
+---
+
+## A minimal Stan workflow
+
+```{r}
+#| eval: false
+#| filename: "R · Stan model"
+
+stan_code <- "
+data {
+  int<lower=0> N;
+  vector[N] y;
+}
+parameters {
+  real mu;
+  real<lower=0> sigma;
+}
+model {
+  mu ~ normal(0, 10);      // prior
+  sigma ~ exponential(1);  // prior
+  target += normal_lpdf(y | mu, sigma);  // likelihood
+}
+generated quantities {
+  vector[N] log_lik;
+  for (n in 1:N) {
+    log_lik[n] = normal_lpdf(y[n] | mu, sigma);
+  }
+}
+"
+writeLines(stan_code, "model.stan")
+```
+
+---
+
+Provide some data for the input
+
+```{r}
+#| eval: false
+#| filename: "R · data"
+library(cmdstanr)
+
+stan_data <- list(N = 20, y = rnorm(20, mean = 5, sd = 2))
+cmdstanr::write_stan_json(stan_data, "data.json")
+
+> stan_data
+$N
+[1] 20
+
+$y
+ [1] 4.543589 4.899750 4.081620 8.698614 4.827003 2.903813 8.659615 5.165155
+ [9] 5.148127 1.206675 2.368544 7.873981 5.071258 5.322390 6.913431 7.336083
+[17] 3.462279 3.717310 1.620141 3.577615
+```
+
+---
+
+### Language interfaces
+
+#### Using R with [`cmdstanr`](https://mc-stan.org/cmdstanr/)
+
+```{r}
+#| eval: false
+#| filename: "R · cmdstanr"
+
+library(cmdstanr)
+library(bayesplot)
+library(loo)
+
+# compile Stan model
+mod <- cmdstanr::cmdstan_model("model.stan")
+
+# sample from the model
+fit <- mod$sample(data = "data.json", chains = 4, iter_sampling = 1000)
+
+# get draws
+draws <- fit$draws(variables = c("mu", "sigma"))
+
+# plotting and cross-validation
+bayesplot::mcmc_trace(draws)
+loo::loo(fit$draws("log_lik"))
+```
+
+---
+
+#### Using Python with [`cmdstanpy`](https://mc-stan.org/cmdstanpy/)
+
+```{python}
+#| eval: false
+#| filename: "Python  · cmdstanpy"
+
+from cmdstanpy import CmdStanModel
+import arviz as az
+
+# compile Stan model
+mod = CmdStanModel(stan_file="model.stan")
+
+# sample from the model
+fit = mod.sample(data="data.json", chains=4, iter_sampling=1000)
+
+# get draws
+idata = az.from_cmdstanpy(fit, log_likelihood="log_lik")
+
+# plotting and cross-validation
+az.plot_trace(idata, var_names=["mu", "sigma"])
+az.loo(idata)
+```
+
+---
+
+#### The Command-line interface [`CmdStan`](https://mc-stan.org/docs/cmdstan-guide/)
+
+`cmdstanr` and `cmdstanpy` are thin language wrappers around the `CmdStan` command-line interface.
+
+You can use `CmdStan` directly in the command line:
+
+```{bash}
+#| eval: false
+#| filename: "Bash"
+
+# run from the CmdStan directory
+make model
+
+./model sample num_chains=4 num_samples=1000 \
+  data file=data.json \
+  output file=output.csv
+
+$CMDSTAN/bin/stansummary output_*.csv
+$CMDSTAN/bin/diagnose output_*.csv
+```
+
+Further processing of the output is usually done in Python or R.
+
+---
+
+### Higher-level modelling frameworks
+
+:::: {.columns}
+
+::: {.column width="50%"}
+#### [`brms`](https://paulbuerkner.com/brms/)
+
+Fits customized Bayesian multilevel and non-linear models in Stan.
+
+```{r}
+#| eval: false
+#| filename: "R · brms"
+
+library(brms)
+
+dat <- data.frame(y = jsonlite::fromJSON("data.json")$y)
+
+fit <- brms::brm(
+  formula = y ~ 1,
+  data = dat,
+  family = gaussian(),
+  prior = c(
+    prior(normal(0, 10), class = Intercept),
+    prior(exponential(1), class = sigma)
+  ),
+  chains = 4,
+  iter = 2000
+)
+
+bayesplot::mcmc_trace(fit, pars = c("b_Intercept", "sigma"))
+loo::loo(fit)
+```
+:::
+
+::: {.column width="50%"}
+#### [`rstanarm`](https://mc-stan.org/rstanarm/)
+
+Fits standard Bayesian regression models using pre-compiled Stan code.
+
+```{r}
+#| eval: false
+#| filename: "R · rstanarm"
+
+library(rstanarm)
+
+dat <- data.frame(y = jsonlite::fromJSON("data.json")$y)
+
+fit <- rstanarm::stan_glm(
+  formula = y ~ 1,
+  data = dat,
+  family = gaussian(),
+  prior_intercept = normal(0, 10, autoscale = FALSE),
+  prior_aux = exponential(1, autoscale = FALSE),
+  chains = 4,
+  iter = 2000
+)
+
+
+
+bayesplot::mcmc_trace(fit, pars = c("(Intercept)", "sigma"))
+loo::loo(fit)
+```
+:::
+
+::::
+
+---
+
+## The Stan ecosystem and its libraries
+
+::: {.callout-note}
+## Different layers in the Stan ecosystem
+
++ **Layer 1: Compiler & math**: `stanc3` · `stan` · `math`
+  + Contribute to the fundamental building blocks of the language: compiler transpilation, C++ reverse-mode autodiff, or core inference algorithms.
++ **Layer 2: Command-line engine**: `cmdstan`
+  + Contribute to the lightweight C++ command-line interface that drives compilation and execution.
++ **Layer 3: Language interfaces**: `cmdstanr` · `cmdstanpy` · `rstan`
+  + Contribute to environment-specific host language wrappers (R, Python, Julia, shell) that pass data to CmdStan and manage process calls.
++ **Layer 4: Workflow & analysis**: `posterior` · `bayesplot` · `loo` · `priorsense` · `rstanarm` · ...
+  + Contribute to downstream packages used among others for visualization, posterior diagnostics, cross-validation, and sensitivity analysis.
+
+:::
+
+---
+
+### Compiler, math, and CmdStan
+
+| Package | Description | Relations | Language |
+|---------|-------------|-----------|----------|
+| [`math`](https://mc-stan.org/math/) | Autodiff library for distributions, linear algebra, and gradients | Used by generated model code | C++ |
+| [`stanc3`](https://github.com/stan-dev/stanc3) | Compiler that translates `.stan` to C++ | Feeds `cmdstan` and `rstan` | OCaml |
+| [`stan`](https://github.com/stan-dev/stan) | Inference algorithms and services (HMC/NUTS, etc.) | Built on `math`; used via `cmdstan` / `rstan` | C++ |
+| [`cmdstan`](https://github.com/stan-dev/cmdstan) | Command-line engine to compile and run Stan models | Wraps `stanc3` + `stan` + `math`; backend for `cmdstanr` / `cmdstanpy` | C++ / CLI |
+
+---
+
+### Language interfaces
+
+| Package | Description | Relations | Language |
+|---------|-------------|-----------|----------|
+| [`cmdstanr`](https://github.com/stan-dev/cmdstanr) | R wrapper around CmdStan; returns `CmdStanMCMC` | Calls `cmdstan`; used with `posterior`, `bayesplot`, `loo` | R |
+| [`cmdstanpy`](https://github.com/stan-dev/cmdstanpy) | Python wrapper around CmdStan; returns `CmdStanMCMC` | Calls `cmdstan`; used with `arviz` | Python |
+| [`rstan`](https://github.com/stan-dev/rstan) | R interface that embeds Stan in-process; returns `stanfit` | Alternative to CmdStan; used by `rstanarm` and `rstantools` packages | R |
+
+---
+
+### Workflow, modeling, and packaging
+
+| Package | Description | Relations | Language |
+|---------|-------------|-----------|----------|
+| [`brms`](https://github.com/paul-buerkner/brms) | Flexible multilevel / distributional regression via formulas; returns `brmsfit` | Generates Stan; backends `cmdstanr` / `rstan`; used with `loo`, `bayesplot` | R |
+| [`rstanarm`](https://github.com/stan-dev/rstanarm/) | Precompiled applied regression models; returns `stanreg` | Built on `rstan`; used with `loo`, `bayesplot`, `projpred` | R |
+| [`posterior`](https://github.com/stan-dev/posterior/) | Tools to manipulate and summarize draws (R-hat, ESS, etc.) | Shared draws API for `cmdstanr` and analysis packages | R |
+| [`bayesplot`](https://mc-stan.org/bayesplot/) | ggplot2 plots for MCMC diagnostics, PPC, and posteriors | Uses draws from interfaces / `posterior` | R |
+
+---
+
+### Workflow, modeling, and packaging (continued I)
+
+| Package | Description | Relations | Language |
+|---------|-------------|-----------|----------|
+| [`loo`](https://github.com/stan-dev/loo/) | Approximate LOO-CV (PSIS-LOO), WAIC, and model weights | Needs pointwise `log_lik` from fitted models | R |
+| [`arviz`](https://github.com/arviz-devs/arviz) | Diagnostics, plots, and model comparison in Python; returns `DataTree` | Python counterpart to `posterior` / `bayesplot` / parts of `loo` | Python |
+| [`priorsense`](https://github.com/n-kall/priorsense) | Prior and likelihood sensitivity analysis (power-scaling) | Uses `posterior`; related to PSIS methods in `loo` | R |
+| [`projpred`](https://mc-stan.org/projpred/) | Projection predictive variable selection | Uses `stanreg` (`rstanarm`) or `brmsfit` (`brms`) as reference | R |
+
+---
+
+### Workflow, modeling, and packaging (continued II)
+
+| Package | Description | Relations | Language |
+|---------|-------------|-----------|----------|
+| [`shinystan`](https://github.com/stan-dev/shinystan/) | Interactive Shiny GUI for MCMC diagnostics | Uses `stanfit` / `stanreg`; overlaps with `bayesplot` | R |
+| [`rstantools`](https://github.com/stan-dev/rstantools/) | Tools to ship Stan models inside R packages; models typically return `stanfit` | Scaffolding used by packages such as `rstanarm` | R |
+| [`posteriordb`](https://github.com/stan-dev/posteriordb) | Database of models, data, and reference posteriors | Shared resource for testing, teaching, and CI | R / Python / data |

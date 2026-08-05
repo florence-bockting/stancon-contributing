@@ -6,33 +6,7 @@ This is the material for the tutorial on contributing to the Stan ecosystem at S
 
 ## Goals {.unnumbered}
 
-By the end of this workshop you should be able to:
-
-+ Explain what Stan is and how the ecosystem is organized
-+ Identify which repository matches your skills and interests
-+ Follow the contribution workflow for Stan's R packages
-+ Make a small, reviewable first contribution
-
-## Prerequisites {.unnumbered}
-
-+ Basic familiarity with Bayesian modeling (helpful but not required)
-+ Comfort with either R or Python for the hands-on section
-+ A GitHub account
-
-## How to use these materials {.unnumbered}
-
-This repository is a **Quarto book**. The same section files render as:
-
-| Command | Output |
-|---------|--------|
-| `quarto render` | Full HTML book in `_book/` (notebook/handout) |
-| `quarto render --profile slides 02-ecosystem.qmd` | RevealJS slides for one section in `_slides/` |
-
-Each chapter file can be rendered on its own for presenting a single session:
-
-```bash
-quarto render --profile slides 02-ecosystem.qmd
-```
+TODO
 
 ## Contents {.unnumbered}
 

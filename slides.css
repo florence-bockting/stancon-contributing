@@ -142,18 +142,20 @@
 
 /* Extra top inset so content clears the section label */
 .reveal .slides section.slide:not(.title-slide):not(.center) {
-  padding-top: 1.1em;
+  padding-top: 0.45em;
 }
 
 .reveal h2 {
   color: var(--stan-blue-dark);
   border-bottom: 2px solid var(--stan-rule);
+  margin-top: 0.1em;
   padding-bottom: 0.25em;
   margin-bottom: 0.5em;
 }
 
 .reveal h3,
-.reveal h4 {
+.reveal h4,
+.reveal h5 {
   color: var(--stan-slate);
 }
 
@@ -163,6 +165,17 @@
   margin-right: 0.35em;
   color: var(--stan-slate);
   transform: translateY(-0.06em);
+}
+
+/* h4 / h5: same slate style; h5 a step smaller and not bold */
+.reveal h4 {
+  font-size: 1.05em;
+  font-weight: 600;
+}
+
+.reveal h5 {
+  font-size: 0.95em;
+  font-weight: 400;
 }
 
 .reveal p,
@@ -175,8 +188,53 @@
 
 .reveal pre:not(.mermaid),
 .reveal pre:not(.mermaid) code {
-  font-size: 0.65em;
+  font-size: 0.75em;
   line-height: 1.25;
+}
+
+/* Space below code boxes before following slide text */
+.reveal .slides section .cell {
+  margin-bottom: 0.85em;
+}
+
+/* Side-by-side code examples: slightly smaller type */
+.reveal .columns pre:not(.mermaid),
+.reveal .columns pre:not(.mermaid) code {
+  font-size: 0.65em;
+}
+
+.reveal .columns .code-with-filename .code-with-filename-file pre {
+  font-size: 0.55em;
+}
+
+/* Code chunk filename labels (e.g. #| filename: "R") — Stan blue bar */
+.reveal .code-with-filename .code-with-filename-file {
+  background-color: var(--stan-logo-blue);
+  border: 1px solid var(--stan-logo-blue);
+  border-bottom: none;
+  border-radius: 0.35em 0.35em 0 0;
+  padding: 0.28em 0.75em;
+  margin-bottom: 0;
+}
+
+.reveal .code-with-filename .code-with-filename-file pre {
+  background-color: transparent;
+  margin: 0;
+  font-size: 0.6em;
+  line-height: 1.3;
+  color: var(--stan-cream);
+}
+
+.reveal .code-with-filename .code-with-filename-file strong {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--stan-cream);
+}
+
+.reveal .code-with-filename div.sourceCode {
+  border: 1px solid color-mix(in srgb, var(--stan-logo-blue) 35%, var(--stan-rule));
+  border-top: 1px solid color-mix(in srgb, var(--stan-logo-blue) 22%, var(--stan-rule));
+  border-radius: 0 0 0.35em 0.35em;
 }
 
 /* Mermaid: match Stan slide palette (Quarto JS theme uses these vars) */
@@ -378,6 +436,24 @@
 
 .reveal div.callout.callout-important .callout-icon::before {
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-exclamation-triangle" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .044.017.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg>');
+}
+
+/* Checklist callouts: checkmark bullets */
+.reveal div.callout.callout-note.checklist ul {
+  list-style: none;
+  padding-left: 1.25em;
+}
+
+.reveal div.callout.callout-note.checklist ul > li {
+  position: relative;
+}
+
+.reveal div.callout.callout-note.checklist ul > li::before {
+  content: "✓";
+  position: absolute;
+  left: -1.2em;
+  color: var(--stan-logo-blue);
+  font-weight: 700;
 }
 
 /* Parent section title — top-left, same height/size as slide number */

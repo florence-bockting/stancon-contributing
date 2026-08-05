@@ -10,8 +10,9 @@ book:
   chapters:
     - index.qmd
     - 01-what-is-stan.qmd
-    - 02-how-to-contribute.qmd
-    - 03-find-information.qmd
+    - 02-stan-ecosystem.qmd
+    - 03-how-to-contribute.qmd
+    - 04-find-information.qmd
     - 05-checklist.qmd
 
 format:

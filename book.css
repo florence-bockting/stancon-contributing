@@ -94,6 +94,24 @@ div.callout.callout-important .callout-icon::before {
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="fill: %23F5E8C9" class="bi bi-exclamation-triangle" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .044.017.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg>');
 }
 
+/* Checklist callouts: checkmark bullets */
+div.callout.callout-note.checklist ul {
+  list-style: none;
+  padding-left: 1.25em;
+}
+
+div.callout.callout-note.checklist ul > li {
+  position: relative;
+}
+
+div.callout.callout-note.checklist ul > li::before {
+  content: "✓";
+  position: absolute;
+  left: -1.2em;
+  color: var(--stan-logo-blue);
+  font-weight: 700;
+}
+
 /* Sidebar / TOC accents */
 .sidebar nav .nav-link.active,
 .sidebar nav .nav-link:hover,
@@ -129,6 +147,64 @@ table thead {
 table thead th {
   border-bottom: 2px solid var(--stan-rule);
   color: var(--stan-blue-dark);
+}
+
+/* Code blocks — match slide corporate styling */
+.cell {
+  margin-bottom: 1em;
+}
+
+/* Filename labels (e.g. #| filename: "R") — Stan blue bar */
+.code-with-filename .code-with-filename-file {
+  background-color: var(--stan-logo-blue);
+  border: 1px solid var(--stan-logo-blue);
+  border-bottom: none;
+  border-radius: 0.35em 0.35em 0 0;
+  padding: 0.35em 0.85em;
+  margin-bottom: 0;
+}
+
+.code-with-filename .code-with-filename-file pre {
+  background-color: transparent;
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.3;
+  color: var(--stan-cream);
+}
+
+.code-with-filename .code-with-filename-file strong {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--stan-cream);
+}
+
+/* Plain code blocks: light matching border */
+div.sourceCode {
+  border: 1px solid color-mix(in srgb, var(--stan-logo-blue) 22%, var(--stan-rule));
+  border-radius: 0.35em;
+}
+
+/* Code under a filename bar: join to the bar above */
+.code-with-filename div.sourceCode {
+  border-color: color-mix(in srgb, var(--stan-logo-blue) 35%, var(--stan-rule));
+  border-top-color: color-mix(in srgb, var(--stan-logo-blue) 22%, var(--stan-rule));
+  border-radius: 0 0 0.35em 0.35em;
+  margin-top: 0;
+}
+
+/* Side-by-side columns in the book: stack vertically for readability */
+.columns {
+  display: block;
+}
+
+.columns > .column {
+  width: 100% !important;
+  max-width: 100%;
+  margin-bottom: 1.5em;
+}
+
+.columns > .column:last-child {
+  margin-bottom: 0;
 }
 
 /* Index page: Stan logo with layered watermark shadow (mirrors slides) */

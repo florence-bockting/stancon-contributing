@@ -1,0 +1,162 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Contributing to Stan",
+    "section": "",
+    "text": "Goals\nThis is the material for the tutorial on contributing to the Stan ecosystem at StanCon 2026.\nTODO",
+    "crumbs": [
+      "Goals"
+    ]
+  },
+  {
+    "objectID": "index.html#contents",
+    "href": "index.html#contents",
+    "title": "Contributing to Stan",
+    "section": "Contents",
+    "text": "Contents\n\nWhat is Stan?\nThe Stan ecosystem\nHow to contribute\nHands-on exercise\n\nLonger reference guides live alongside the book:\n\nstan-ecosystem-guide.md\nhow-to-contribute-stan-r-packages.md",
+    "crumbs": [
+      "Goals"
+    ]
+  },
+  {
+    "objectID": "01-what-is-stan.html",
+    "href": "01-what-is-stan.html",
+    "title": "1  What is Stan?",
+    "section": "",
+    "text": "1.1 An open-source community\nStan is…\nWe communicate via:",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>What is Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "01-what-is-stan.html#sec-open-source-community",
+    "href": "01-what-is-stan.html#sec-open-source-community",
+    "title": "1  What is Stan?",
+    "section": "",
+    "text": "Slack\n\ndifferent channels (e.g., #general, #help)\nmainly developer discussions\n\nDiscourse\n\nquestions, discussion, and announcements related to Stan\nfor both users and developers\n\nGitHub\n\ncode repositories\nissue tracker for reporting bugs and requesting features\npull requests for contributing code, documentation, examples, etc.\n\nStan Website\n\ndocumentation, tutorials, case studies, etc.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>What is Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "01-what-is-stan.html#sec-open-source-ecosystem",
+    "href": "01-what-is-stan.html#sec-open-source-ecosystem",
+    "title": "1  What is Stan?",
+    "section": "1.2 An open-source ecosystem",
+    "text": "1.2 An open-source ecosystem\n\nmultiple packages/libraries that work together to provide a complete probabilistic programming environment\n\n\n\n\n\n\nMore on this later!",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>What is Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "01-what-is-stan.html#sec-probabilistic-programming-language",
+    "href": "01-what-is-stan.html#sec-probabilistic-programming-language",
+    "title": "1  What is Stan?",
+    "section": "1.3 A probabilistic programming language",
+    "text": "1.3 A probabilistic programming language\ndata {\n  int N;   // number of observations\n  int J;   // number of students\n  int K;   // number of items on exam\n  array[N] int&lt;lower=0, upper=J&gt; student;\n  array[N] int&lt;lower=0, upper=K&gt; item;\n  array[N] int&lt;lower=0, upper=1&gt; y;\n  vector[J] x;\n  real mu_mu_a, mu_mu_b;\n  real&lt;lower=0&gt; sigma_mu_a, sigma_mu_b, mu_sigma_a, mu_sigma_b;\n}\ntransformed data {\n  vector[J] x_adj = (x - mean(x))/sd(x);\n}\nparameters {\n  real mu_a, mu_b;\n  real&lt;lower=0&gt; sigma_a, sigma_b;\n  vector&lt;offset=mu_a, multiplier=sigma_a&gt;[K] a;\n  vector&lt;offset=mu_b, multiplier=sigma_b&gt;[K] b;\n}\nmodel {\n  a ~ normal(mu_a, sigma_a);\n  b ~ normal(mu_b, sigma_b);\n  mu_a ~ normal(mu_mu_a, sigma_mu_a);\n  mu_b ~ normal(mu_mu_b, sigma_mu_b);\n  sigma_a ~ exponential(1/mu_sigma_a);\n  sigma_b ~ exponential(1/mu_sigma_b);\n  y ~ bernoulli(0.25 + 0.75*inv_logit(a[item] + b[item] .* x_adj[student]));\n}",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>What is Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "02-stan-ecosystem.html",
+    "href": "02-stan-ecosystem.html",
+    "title": "2  The Stan Ecosystem",
+    "section": "",
+    "text": "2.1 A minimal Stan workflow\nR · Stan model\n\nstan_code &lt;- \"\ndata {\n  int&lt;lower=0&gt; N;\n  vector[N] y;\n}\nparameters {\n  real mu;\n  real&lt;lower=0&gt; sigma;\n}\nmodel {\n  mu ~ normal(0, 10);      // prior\n  sigma ~ exponential(1);  // prior\n  target += normal_lpdf(y | mu, sigma);  // likelihood\n}\ngenerated quantities {\n  vector[N] log_lik;\n  for (n in 1:N) {\n    log_lik[n] = normal_lpdf(y[n] | mu, sigma);\n  }\n}\n\"\nwriteLines(stan_code, \"model.stan\")\nProvide some data for the input\nR · data\n\nlibrary(cmdstanr)\n\nstan_data &lt;- list(N = 20, y = rnorm(20, mean = 5, sd = 2))\ncmdstanr::write_stan_json(stan_data, \"data.json\")\n\n&gt; stan_data\n$N\n[1] 20\n\n$y\n [1] 4.543589 4.899750 4.081620 8.698614 4.827003 2.903813 8.659615 5.165155\n [9] 5.148127 1.206675 2.368544 7.873981 5.071258 5.322390 6.913431 7.336083\n[17] 3.462279 3.717310 1.620141 3.577615",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>The Stan Ecosystem</span>"
+    ]
+  },
+  {
+    "objectID": "02-stan-ecosystem.html#a-minimal-stan-workflow",
+    "href": "02-stan-ecosystem.html#a-minimal-stan-workflow",
+    "title": "2  The Stan Ecosystem",
+    "section": "",
+    "text": "2.1.1 Language interfaces\n\n2.1.1.1 Using R with cmdstanr\n\n\n\nR · cmdstanr\n\nlibrary(cmdstanr)\nlibrary(bayesplot)\nlibrary(loo)\n\n# compile Stan model\nmod &lt;- cmdstanr::cmdstan_model(\"model.stan\")\n\n# sample from the model\nfit &lt;- mod$sample(data = \"data.json\", chains = 4, iter_sampling = 1000)\n\n# get draws\ndraws &lt;- fit$draws(variables = c(\"mu\", \"sigma\"))\n\n# plotting and cross-validation\nbayesplot::mcmc_trace(draws)\nloo::loo(fit$draws(\"log_lik\"))\n\n\n\n\n\n2.1.1.2 Using Python with cmdstanpy\n\n\n\nPython  · cmdstanpy\n\nfrom cmdstanpy import CmdStanModel\nimport arviz as az\n\n# compile Stan model\nmod = CmdStanModel(stan_file=\"model.stan\")\n\n# sample from the model\nfit = mod.sample(data=\"data.json\", chains=4, iter_sampling=1000)\n\n# get draws\nidata = az.from_cmdstanpy(fit, log_likelihood=\"log_lik\")\n\n# plotting and cross-validation\naz.plot_trace(idata, var_names=[\"mu\", \"sigma\"])\naz.loo(idata)\n\n\n\n\n\n2.1.1.3 The Command-line interface CmdStan\ncmdstanr and cmdstanpy are thin language wrappers around the CmdStan command-line interface.\nYou can use CmdStan directly in the command line:\n\n\n\nBash\n\n# run from the CmdStan directory\nmake model\n\n./model sample num_chains=4 num_samples=1000 \\\n  data file=data.json \\\n  output file=output.csv\n\n$CMDSTAN/bin/stansummary output_*.csv\n$CMDSTAN/bin/diagnose output_*.csv\n\n\nFurther processing of the output is usually done in Python or R.\n\n\n\n\n2.1.2 Higher-level modelling frameworks\n\n\n\n2.1.2.1 brms\nFits customized Bayesian multilevel and non-linear models in Stan.\n\n\n\nR · brms\n\nlibrary(brms)\n\ndat &lt;- data.frame(y = jsonlite::fromJSON(\"data.json\")$y)\n\nfit &lt;- brms::brm(\n  formula = y ~ 1,\n  data = dat,\n  family = gaussian(),\n  prior = c(\n    prior(normal(0, 10), class = Intercept),\n    prior(exponential(1), class = sigma)\n  ),\n  chains = 4,\n  iter = 2000\n)\n\nbayesplot::mcmc_trace(fit, pars = c(\"b_Intercept\", \"sigma\"))\nloo::loo(fit)\n\n\n\n\n\n2.1.2.2 rstanarm\nFits standard Bayesian regression models using pre-compiled Stan code.\n\n\n\nR · rstanarm\n\nlibrary(rstanarm)\n\ndat &lt;- data.frame(y = jsonlite::fromJSON(\"data.json\")$y)\n\nfit &lt;- rstanarm::stan_glm(\n  formula = y ~ 1,\n  data = dat,\n  family = gaussian(),\n  prior_intercept = normal(0, 10, autoscale = FALSE),\n  prior_aux = exponential(1, autoscale = FALSE),\n  chains = 4,\n  iter = 2000\n)\n\n\n\nbayesplot::mcmc_trace(fit, pars = c(\"(Intercept)\", \"sigma\"))\nloo::loo(fit)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>The Stan Ecosystem</span>"
+    ]
+  },
+  {
+    "objectID": "02-stan-ecosystem.html#the-stan-ecosystem-and-its-libraries",
+    "href": "02-stan-ecosystem.html#the-stan-ecosystem-and-its-libraries",
+    "title": "2  The Stan Ecosystem",
+    "section": "2.2 The Stan ecosystem and its libraries",
+    "text": "2.2 The Stan ecosystem and its libraries\n\n\n\n\n\n\nNoteDifferent layers in the Stan ecosystem\n\n\n\n\nLayer 1: Compiler & math: stanc3 · stan · math\n\nContribute to the fundamental building blocks of the language: compiler transpilation, C++ reverse-mode autodiff, or core inference algorithms.\n\nLayer 2: Command-line engine: cmdstan\n\nContribute to the lightweight C++ command-line interface that drives compilation and execution.\n\nLayer 3: Language interfaces: cmdstanr · cmdstanpy · rstan\n\nContribute to environment-specific host language wrappers (R, Python, Julia, shell) that pass data to CmdStan and manage process calls.\n\nLayer 4: Workflow & analysis: posterior · bayesplot · loo · priorsense · rstanarm · …\n\nContribute to downstream packages used among others for visualization, posterior diagnostics, cross-validation, and sensitivity analysis.\n\n\n\n\n\n\n2.2.1 Compiler, math, and CmdStan\n\n\n\nPackage\nDescription\nRelations\nLanguage\n\n\n\n\nmath\nAutodiff library for distributions, linear algebra, and gradients\nUsed by generated model code\nC++\n\n\nstanc3\nCompiler that translates .stan to C++\nFeeds cmdstan and rstan\nOCaml\n\n\nstan\nInference algorithms and services (HMC/NUTS, etc.)\nBuilt on math; used via cmdstan / rstan\nC++\n\n\ncmdstan\nCommand-line engine to compile and run Stan models\nWraps stanc3 + stan + math; backend for cmdstanr / cmdstanpy\nC++ / CLI\n\n\n\n\n\n\n2.2.2 Language interfaces\n\n\n\nPackage\nDescription\nRelations\nLanguage\n\n\n\n\ncmdstanr\nR wrapper around CmdStan; returns CmdStanMCMC\nCalls cmdstan; used with posterior, bayesplot, loo\nR\n\n\ncmdstanpy\nPython wrapper around CmdStan; returns CmdStanMCMC\nCalls cmdstan; used with arviz\nPython\n\n\nrstan\nR interface that embeds Stan in-process; returns stanfit\nAlternative to CmdStan; used by rstanarm and rstantools packages\nR\n\n\n\n\n\n\n2.2.3 Workflow, modeling, and packaging\n\n\n\nPackage\nDescription\nRelations\nLanguage\n\n\n\n\nbrms\nFlexible multilevel / distributional regression via formulas; returns brmsfit\nGenerates Stan; backends cmdstanr / rstan; used with loo, bayesplot\nR\n\n\nrstanarm\nPrecompiled applied regression models; returns stanreg\nBuilt on rstan; used with loo, bayesplot, projpred\nR\n\n\nposterior\nTools to manipulate and summarize draws (R-hat, ESS, etc.)\nShared draws API for cmdstanr and analysis packages\nR\n\n\nbayesplot\nggplot2 plots for MCMC diagnostics, PPC, and posteriors\nUses draws from interfaces / posterior\nR\n\n\n\n\n\n\n2.2.4 Workflow, modeling, and packaging (continued I)\n\n\n\nPackage\nDescription\nRelations\nLanguage\n\n\n\n\nloo\nApproximate LOO-CV (PSIS-LOO), WAIC, and model weights\nNeeds pointwise log_lik from fitted models\nR\n\n\narviz\nDiagnostics, plots, and model comparison in Python; returns DataTree\nPython counterpart to posterior / bayesplot / parts of loo\nPython\n\n\npriorsense\nPrior and likelihood sensitivity analysis (power-scaling)\nUses posterior; related to PSIS methods in loo\nR\n\n\nprojpred\nProjection predictive variable selection\nUses stanreg (rstanarm) or brmsfit (brms) as reference\nR\n\n\n\n\n\n\n2.2.5 Workflow, modeling, and packaging (continued II)\n\n\n\nPackage\nDescription\nRelations\nLanguage\n\n\n\n\nshinystan\nInteractive Shiny GUI for MCMC diagnostics\nUses stanfit / stanreg; overlaps with bayesplot\nR\n\n\nrstantools\nTools to ship Stan models inside R packages; models typically return stanfit\nScaffolding used by packages such as rstanarm\nR\n\n\nposteriordb\nDatabase of models, data, and reference posteriors\nShared resource for testing, teaching, and CI\nR / Python / data",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>The Stan Ecosystem</span>"
+    ]
+  },
+  {
+    "objectID": "03-how-to-contribute.html",
+    "href": "03-how-to-contribute.html",
+    "title": "3  How to contribute to Stan?",
+    "section": "",
+    "text": "3.1 Types of contributions\nThere are many ways to contribute to Stan, including:",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>How to contribute to Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "03-how-to-contribute.html#types-of-contributions",
+    "href": "03-how-to-contribute.html#types-of-contributions",
+    "title": "3  How to contribute to Stan?",
+    "section": "",
+    "text": "asking and answering questions on Stan Discourse\nreporting problems when interacting with the software or documentation\nrequesting new features or improvements\nproviding feedback on documentation\ncontributing with a case study of your specific research field\ncontributing code",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>How to contribute to Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "03-how-to-contribute.html#typical-workflows-for-contributing",
+    "href": "03-how-to-contribute.html#typical-workflows-for-contributing",
+    "title": "3  How to contribute to Stan?",
+    "section": "3.2 Typical workflows for contributing",
+    "text": "3.2 Typical workflows for contributing\n\n3.2.1 Participate in the Stan Discourse\n\nStan Discourse is the main forum for users and developers to ask questions, discuss issues, and share ideas.\nwe want a friendly and welcoming environment\n\nCode of Conduct\nDiscourse guidelines\n\n\n\n\n\n3.2.2 Feature requests and bug reports\n\ngo to the GitHub repository  of interest\nget familiar with Issues and PRs (Example: loo)\nfor new contributors\n\ncheck for labels like “help wanted” or “good first issue”\navoid working on issues that incorporate refactoring or larger changes\nwhen in doubt, ask in the issue whether it’s a good idea to work on it\n\nopen a new Issue\n\ncheck first whether the issue already exists (avoid duplicates)\nsome tips for writing good Issues…\n\n\n\n\n\n\n\n\n\nNoteWriting good Issues: Bug Report\n\n\n\n\nTitle: One sentence, specific, searchable.\nBody\n\nWhat happened vs what you expected\nMinimal reproducible example (i.e., small model/script/data that triggers the problem)\n(Optional) Environment: OS, hardware if relevant\nExact steps to reproduce the problem.\nLogs / error output (if possible as text in a code block, not a screenshot, so it’s searchable)\n\nExamples:\n\nbayesplot\nbrms\n\n\n\n\n\n\n\n\n\n\n\nNoteWriting good Issues: Feature Request\n\n\n\n\nTitle: One sentence, specific, searchable.\nBody\n\ndescribe the problem or limitation\n(optional) propose solution\n(optional) note scope of Issue: small, self-contained or does it open a design discussion?\n\nExamples:\n\nbayesplot\n\n\n\n\n\nAdditional references:\n\nMozilla’s guide to writing good bug reports\n“How to Report Bugs Effectively” by Simon Tatham\nR package “reprex” (tidyverse): runs your code, captures output, and formats it (code + results) as ready-to-paste Markdown for GitHub issues\n\n\n\n\n\n3.2.3 Feedback on documentation\n\nclarifying confusing sections\nadding examples/code snippets\nfixing inaccuracies (e.g., when current behavior deviates from the documented behavior)\nlet us know if something is missing or unclear\nfixing typos, grammar, broken links\n\n\n\n\n3.2.4 Contributing a case study or tutorial\n\nlist of case studies in Stan\nblog post by Bob Carpenter on expanding the Stan Users Guide\n\n\n\n\n\n\n\n\nNoteChecklist for contributing a case study\n\n\n\n\n1. Initial contact\n\npost on the Stan Discourse to reach the team\npost case study or tutorial idea in the Stan Discourse first\n\n\n\n2. Content requirements\n\nwrite it as a narrative document, not just code\nuse a reproducible-notebook format\nnote exact software and compiler versions used\nfix random seeds so results are exactly reproducible\n\n\n\n\n\n\n\n\n\n\n\n\nNoteChecklist for contributing a case study (continued)\n\n\n\n\n3. Licensing\n\nlicense code under an open source license (e.g., BSD or GPL)\nlicense text as Creative Commons (CC-BY is most common)\nauthor retains copyright (but Stan needs to be permitted to host and redistribute)\n\n\n\n4. Metadata for published case study\n\nTitle\nAuthor(s) (and optional affiliation)\nShort abstract/description (in 2-4 sentences, what problem is solved and why it matters)\nKeywords (3-6 terms for discoverability)\nSource repository link (e.g., a public GitHub repo containing the actual notebook/knitr source, separate from the rendered HTML)\nDependencies list (package/library versions used)\nRendered HTML version (the actual output others will read)\n\n\n\n\n\n\n\n3.2.5 Contributing Code\nSome packages have templates others don’t, but overall a good PR description should incorporate the following information:\n\n\n\n\n\n\n\nNoteWriting a good PR description\n\n\n\n\nBefore you start:\n\nHave you read the contributing guidelines? (see GitHub repository)\nHave you read the AI Contribution Policy?\nFor contributing to Stan core libraries (e.g. stan, math, stanc3):\n\nHave you checked the Developer Wiki?\n\nKeep the PR small and focused on one logical change\nNot ready for review yet? Open it as a Draft PR so reviewers know to hold off.\n\n\n\nTitle: One sentence, specific, searchable.\n\nGood: Fix incorrect ESS calculation for thinned chains\nAvoid: Bug fix\n\n\n\n\n\n\n\n\n\n\n\n\nNoteWriting a good PR description (continued I)\n\n\n\n\nBody:\n\nLink PR to Issue via GitHub keywords like Fixes #123 or Closes #123\n\n\n\nDescription\n\nDescribe what has been changed and why.\nBe concise and use your own words (try to avoid using AI-generated text).\nAdd any uncertainties or open questions you have here as well.\n\n\n\nBreaking changes: Does this PR change existing behavior, APIs, or output? If yes, describe the impact.\n\n\nTests: (if applicable) Which tests have you added?\n\n\nDocumentation / Vignettes: (if applicable) Have you added documentation?\n\n\n\n\n\n\n\n\n\n\nNoteWriting a good PR description (continued II)\n\n\n\n\nChecklist\n\nstyle is consistent with existing code/docs\ndocumentation/vignette is rendered locally\ntests and devtools::check() pass\nAI-assisted development: Disclose if you used an AI assistant and commit that you reviewed the changes critically.\nNEWS.md entry added\nsee our detailed checklist\n\n\n\nTODOs: List any remaining tasks you need to complete before the PR is ready to be merged.\n\n\nExamples:\n\nbayesplot\nbrms\n\n\n\n\n\n\n\n3.2.6 Some reflections on the use of AI-assisted development\n\nStan AI Contribution Guideline\nUse your own words when writing the PR description and comments in a PR review process\nReview all changes made by an AI assistant critically and ask yourself:\n\nIs this change correct? Do I need this change? Is this change in the scope of the PR?\n\nWhen in doubt about something, ask rather the Stan developers than the AI assistant",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>How to contribute to Stan?</span>"
+    ]
+  },
+  {
+    "objectID": "04-find-information.html",
+    "href": "04-find-information.html",
+    "title": "4  Where to find information?",
+    "section": "",
+    "text": "4.1 Different layers of documentation",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Where to find information?</span>"
+    ]
+  },
+  {
+    "objectID": "04-find-information.html#different-layers-of-documentation",
+    "href": "04-find-information.html#different-layers-of-documentation",
+    "title": "4  Where to find information?",
+    "section": "",
+    "text": "different layers of documentation\nmental model following the Diátaxis framework:\n\n\n\n\n\n\n\n\n\n\nType\nFocus\nStan examples\n\n\n\n\nReference\nwhat\nFunction/package index, Stan math docs, Stan reference manual\n\n\nHow-to guides\nsolve my problem\nVignettes, case studies\n\n\nTutorials\nlearn by doing\nUser’s Guide walkthroughs, example-models\n\n\nExplanation\nwhy it’s designed this way\nWiki, discussions on Discourse\n\n\n\n\n\n\n4.1.1 Reference (“What”)\n\n“What counts as a valid Stan program? What are blocks, types, and constraints, and how do they behave?”\n\nsee Stan reference manual\ngrammar/rules of the Stan language\nanalogous to a grammar book\n\n“What does normal_lpdf in stan_code do, and what arguments/types does it expect?”\n\nsee Functions reference\nbuilt-in vocabulary of the Stan language\nanalogous to a dictionary\n\n“What does loo() in the loo R package do, and what arguments does it take?”\n\nsee Package index (API) of corresponding downstream package\nExamples: loo, ShinyStan\nAnalogous to a manual for a specific translation tool\n\n\n\n\n\n4.1.2 How-to guides (“Solve my problem”)\n\n“How do I fit a Stan model?”\n\nsee Stan user guide\n\n“How do I plot MCMC draws with bayesplot?”\n\nsee Vignette in bayesplot\n\n“How do I perform leave-one-out cross validation with loo?”\n\nsee Vignette in loo\n\n“How do I estimate multivariate models in brms?”\n\nsee Vignette in brms\n\nEtc.\n\n\n\n\n4.1.3 Tutorials / Case Studies (“Learn by doing”)\n\nTutorials on Stan\nCase Studies:\n\nStan website\nBayesian Workflow book\nAki Vehtari’s website\n\nPublished papers\n\nposterior: Tools for Working with Posterior Distributions in R\nbrms: An R Package for Bayesian Multilevel Models Using Stan\nVisualization in Bayesian workflow (bayesplot)\nArviZ: a modular and flexible library for exploratory analysis of Bayesian models\netc.\n\n\n\n\n4.1.4 Explanation (“Why it’s designed this way”)\n\n“Why is Stan designed this way?”\n\nsee Discourse discussions\nsee Wiki\n\n\n\n\n\n4.1.5 Note about design review\nhttps://github.com/stan-dev/design-docs",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Where to find information?</span>"
+    ]
+  },
+  {
+    "objectID": "05-checklist.html",
+    "href": "05-checklist.html",
+    "title": "5  Checklist",
+    "section": "",
+    "text": "5.1 Contributing to R packages",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checklist</span>"
+    ]
+  },
+  {
+    "objectID": "05-checklist.html#contributing-to-r-packages",
+    "href": "05-checklist.html#contributing-to-r-packages",
+    "title": "5  Checklist",
+    "section": "",
+    "text": "NoteGetting started\n\n\n\n\nCheck open issues or open a new one to discuss your proposed change before starting significant work (for bigger changes; typo/doc fixes can skip this)\nCheck the repository for a CONTRIBUTING.md with package-specific guidance\n\n\n\n\n\n\n\n\n\nNoteAI contribution policy\n\n\n\n\nif you used AI tools (e.g. Claude, ChatGPT, GitHub Copilot) to help write your contribution, review the Stan project’s AI Contribution Policy before opening a PR\ndisclose AI assistance in your PR description if the policy requires it\nyou remain responsible for understanding, testing, and being able to explain any AI-generated code you submit\n\n\n\n\n\n\n\n\n\nNoteFork and clone\n\n\n\n\nraw git: fork on GitHub, then git clone https://github.com/your-username/repository-name.git\nusethis: usethis::create_from_github(\"stan-dev/repository-name\", fork = TRUE)\n\n\n\n\n\n\n\n\n\nNoteCreate a branch for your changes\n\n\n\n\nraw git: start from the main/master branch: git checkout -b fix/123-short-description\nusethis: usethis::pr_init(\"brief-description-of-change\")\n\n\n\n\n\n\n\n\n\nNoteMake your changes on this branch\n\n\n\n\nkeep your branch up to date with upstream\ninstall development dependencies devtools::install_dev_deps()\ndebug with devtools::load_all() and debug(new_function)\nif you add a new function:\n\nadd tests and run them with testthat::test_file() or testthat::test_dir()\nadd documentation to new functions and examples\nrender the documentation with devtools::document()\n\nif you add a new vignette:\n\nensure vignette is rendered locally with devtools::build_vignettes()\n\nensure you follow the style of the existing code/docs\n\n\n\n\n\n\n\n\n\nNoteContributing or changing plots (bayesplot in particular)\n\n\n\n\nbayesplot uses vdiffr for visual regression testing. In visual regression testing plots are compared against reproducible SVG snapshots rather than just checked for errors\nfor any new plotting function or a change to an existing plot’s appearance, add a graphical test using vdiffr::expect_doppelganger(\"descriptive-title\", plot_object) in the relevant test file\nrun devtools::test(), new or changed snapshots will be flagged\nreview flagged snapshots with testthat::snapshot_review(), which opens an interactive Shiny app showing old vs. new SVG side by side\nonly accept a snapshot change if the visual difference is the one you intended\n\n\n\n\n\n\n\n\n\nNoteUpdate NEWS.md\n\n\n\n\nadd a bullet for your change, placed just below the first header in NEWS.md\nfollow the existing formatting and tone used in that file (check recent entries for the convention)\n\n\n\n\n\n\n\n\n\nNoteFinalize your changes\n\n\n\n\nAdd and commit your changes in reasonable chunks git add &lt;files&gt; and git commit -m \"short description of your changes\"\ncheatsheet for conventional git commit types\nrun the full test suite with devtools::test()\nrun the full check with devtools::check()\npush your branch\n\nraw git: git push origin fix/123-short-description\nusethis: usethis::pr_push() (opens the PR flow in your browser for you)\n\n\n\n\n\n\n\n\n\n\nNoteOpen a PR\n\n\n\n\nadd a detailed description of your changes (see How to write a good PR description)\nexpect CI to run additional checks automatically",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checklist</span>"
+    ]
+  }
+]

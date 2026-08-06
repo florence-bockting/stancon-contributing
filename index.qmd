@@ -13,9 +13,5 @@ TODO
 1. [What is Stan?](01-what-is-stan.qmd)
 2. [The Stan ecosystem](02-ecosystem.qmd)
 3. [How to contribute](03-contributing.qmd)
-4. [Hands-on exercise](04-hands-on.qmd)
-
-Longer reference guides live alongside the book:
-
-+ [stan-ecosystem-guide.md](stan-ecosystem-guide.md)
-+ [how-to-contribute-stan-r-packages.md](how-to-contribute-stan-r-packages.md)
+4. [Finding information](04-find-information.qmd)
+5. [Checklist](05-checklist.qmd)

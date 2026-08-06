@@ -8,6 +8,14 @@ format:
 
 # Where to find information?
 
+By the end of this section, you'll have a good sense of the main Stan
+resources, things like user guides, tutorials, case studies, API
+documentation, and scientific articles, and where to look depending
+on what you're trying to find out. We'll walk through how to match
+your question to the right resource.
+
+---
+
 ## Different layers of documentation
 + different layers of documentation
 + mental model following the [Diátaxis](https://diataxis.fr/) framework:

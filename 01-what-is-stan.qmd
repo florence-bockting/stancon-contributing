@@ -7,13 +7,23 @@ format:
 
 # What is Stan?
 
-Stan is...
+By the end of this section, you'll understand that Stan is more than a 
+probabilistic programming language for specifying statistical models; it is 
+also an open-source community and a broader software ecosystem.
+
+---
+
+## Language, Community, Ecosystem
+
+Stan is ...
 
 - an [open-source community](#sec-open-source-community) consisting of people from a variety of different backgrounds (Cognitive Science, Computer Science, Statistics, etc.).
 - an [open-source ecosystem](#sec-open-source-ecosystem) consisting of a core library, interfaces for multiple programming languages, and a growing collection of contributed packages.
 - a [probabilistic programming language](#sec-probabilistic-programming-language) for specifying statistical models.
 
-## An open-source community {#sec-open-source-community}
+---
+
+### An open-source community {#sec-open-source-community}
 
 We communicate via:
 
@@ -29,16 +39,22 @@ We communicate via:
   + pull requests for contributing code, documentation, examples, etc.
 - [Stan Website](https://mc-stan.org)
   + documentation, tutorials, case studies, etc.
-  
-## An open-source ecosystem {#sec-open-source-ecosystem}
 
-- multiple packages/libraries that work together to provide a complete probabilistic programming environment
+---
+
+### An open-source ecosystem {#sec-open-source-ecosystem}
+
+Multiple packages/libraries that work together to provide a complete probabilistic programming environment
 
 ![](img/stan_libraries.png){width="60%" fig-align="center" .nostretch}
 
 More on this [later](#sec-stan-ecosystem)!
 
-## A probabilistic programming language {#sec-probabilistic-programming-language}
+---
+
+### A probabilistic programming language {#sec-probabilistic-programming-language}
+
+A probabilistic programming language for specifying statistical models.
 
 ```stan
 data {

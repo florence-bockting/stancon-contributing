@@ -8,8 +8,16 @@ format:
 
 # How to contribute to Stan?
 
+By the end of this section, you will know the [different ways of
+contributing to Stan]{.hl}, from engaging on Stan Discourse, over filing bug
+reports and feature requests, writing documentation and case studies,
+to contributing code. You will know how to pick a contribution path that
+fits you, write a clear GitHub issue or pull request, and follow project
+norms.
+
 ::: {.callout-important}
-You [don't]{.hl} need to be a professional software developer or statistician in order to contribute to Stan!
+You [don't]{.hl} need to be a professional software developer or statistician
+in order to contribute to Stan!
 ::: 
 
 ## Types of contributions
@@ -28,25 +36,29 @@ There are many ways to contribute to Stan, including:
 
 ### Participate in the Stan Discourse {#sec-participate-in-stan-discourse}
 
-- [Stan Discourse](https://discourse.mc-stan.org) is the main forum for users and
-developers to ask questions, discuss issues, and share ideas.
-- we want a friendly and welcoming environment
+- [Stan Discourse](https://discourse.mc-stan.org) is the main forum for
+  users and developers to ask questions, discuss issues, and share ideas.
+- We aim to keep this a friendly and welcoming space, guided by our:
   + [Code of Conduct](https://mc-stan.org/code-of-conduct.html)
   + [Discourse guidelines](https://discourse.mc-stan.org/guidelines)
+- We also discuss topics on [Slack](https://join.slack.com/t/mc-stan/shared_invite/zt-1le4ebi4m-UMtiOkJb4gcS16qz2wIYCw), but we encourage users to ask questions
+  on Stan Discourse instead as it's open to everyone, so answers can help
+  other community members too.
 
 ---
 
 ### Feature requests and bug reports {#sec-feature-requests-and-bug-reports}
 
-- go to the GitHub repository ![](img/github_logo.png){width="3%"} of interest
-- get familiar with Issues and PRs ([Example: loo](https://github.com/stan-dev/loo/issues))
-- for [new contributors]{.hl}
-  + check for labels like "help wanted" or "good first issue"
-  + avoid working on issues that incorporate refactoring or larger changes
-  + when in doubt, ask in the issue whether it's a good idea to work on it
-- open a [new Issue]{.hl}
-  + check first whether the issue already exists (avoid duplicates)
-  + some tips for writing good Issues...
+- Go to the GitHub repository ![](img/github_logo.png){width="3%"} you want
+  to contribute to.
+- Get familiar with its Issues and PRs (e.g., [loo](https://github.com/stan-dev/loo/issues)).
+- If you're a [new contributor]{.hl}:
+  + Look for labels like "help wanted" or "good first issue."
+  + Avoid issues that involve refactoring or larger changes.
+  + When in doubt, ask in the issue whether it's a good one to work on.
+- To open a [new Issue]{.hl}:
+  + First check whether it already exists, to avoid duplicates.
+  + Some tips for writing good Issues...
 
 ---
 
@@ -94,11 +106,11 @@ developers to ask questions, discuss issues, and share ideas.
 
 ### Feedback on documentation {#sec-feedback-on-documentation}
 
-- clarifying confusing sections
-- adding examples/code snippets
-- fixing inaccuracies (e.g., when current behavior deviates from the documented behavior)
-- let us know if something is missing or unclear
-- fixing typos, grammar, broken links
+- Clarifying confusing sections
+- Adding examples or code snippets
+- Fixing inaccuracies (e.g., when current behavior deviates from documented behavior)
+- Flagging content that is missing or unclear
+- Fixing typos, grammar, and broken links
 
 ---
 
@@ -147,8 +159,7 @@ developers to ask questions, discuss issues, and share ideas.
 ::: {.fragment}
 **4. Metadata for published case study**
 
-  + Title
-  + Author(s) (and optional affiliation)
+  + Title and Author(s) (optional affiliation)
   + Short abstract/description (in 2-4 sentences, what problem is solved and why it matters)
   + Keywords (3-6 terms for discoverability)
   + Source repository link (e.g., a public GitHub repo containing the actual notebook/knitr source, separate from the rendered HTML)
@@ -170,11 +181,10 @@ Some packages have templates others don't, but overall a good PR description sho
 ::: {.fragment}
 **Before you start:**
 
-+ Have you read the contributing guidelines? (see GitHub repository)
-+ Have you read the [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)?
-+ For contributing to Stan core libraries (e.g. `stan`, `math`, `stanc3`):
++ Have you read the contributing guidelines and [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)?
++ Contributing to Stan core libraries (e.g., `stan`, `math`, `stanc3`)?
   + Have you checked the [Developer Wiki](https://github.com/stan-dev/stan/wiki)?
-+ Keep the PR small and focused on one logical change
++ Is your PR small and focused on one logical change?
 + Not ready for review yet? Open it as a **Draft PR** so reviewers know to hold off.
 
 :::
@@ -223,12 +233,13 @@ Some packages have templates others don't, but overall a good PR description sho
 ::: {.fragment}
 *Checklist*
 
-+ style is consistent with existing code/docs
-+ documentation/vignette is rendered locally
-+ tests and `devtools::check()` pass
-+ AI-assisted development: Disclose if you used an AI assistant and commit that you reviewed the changes critically.
++ Style is consistent with existing code and docs
++ Documentation or vignette renders locally
++ Tests and `devtools::check()` pass
 + `NEWS.md` entry added
-+ see our detailed [checklist](#sec-checklist)
++ If you used an AI assistant, this is disclosed and the changes were reviewed critically
++ For the full checklist, see [checklist](#sec-checklist)
+
 :::
 ::: {.fragment}
 *TODOs*: List any remaining tasks you need to complete before the PR is ready to be merged.
@@ -251,3 +262,4 @@ Some packages have templates others don't, but overall a good PR description sho
 + Review all changes made by an AI assistant critically and ask yourself:
   - Is this change correct? Do I need this change? Is this change in the scope of the PR?
 + When in doubt about something, ask rather the Stan developers than the AI assistant
++ TODO

@@ -103,7 +103,7 @@ entries for the convention)
 ## Open a PR
 
 + add a detailed description of your changes (see 
-[How to write a good PR description]())
+[How to write a good PR description](#sec-contributing-code))
 + expect CI to run additional checks automatically
 
 :::

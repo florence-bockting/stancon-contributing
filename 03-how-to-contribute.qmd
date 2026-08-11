@@ -39,7 +39,7 @@ There are many ways to contribute to Stan, including:
 - [Stan Discourse](https://discourse.mc-stan.org) is the main forum for
   users and developers to ask questions, discuss issues, and share ideas.
 - We aim to keep this a friendly and welcoming space, guided by our:
-  + [Code of Conduct](https://mc-stan.org/code-of-conduct.html)
+  + [Code of Conduct](https://mc-stan.org/about/#code-of-conduct)
   + [Discourse guidelines](https://discourse.mc-stan.org/guidelines)
 - We also discuss topics on [Slack](https://join.slack.com/t/mc-stan/shared_invite/zt-1le4ebi4m-UMtiOkJb4gcS16qz2wIYCw), but we encourage users to ask questions
   on Stan Discourse instead as it's open to everyone, so answers can help

@@ -11,7 +11,7 @@ TODO
 ## Contents {.unnumbered}
 
 1. [What is Stan?](01-what-is-stan.qmd)
-2. [The Stan ecosystem](02-ecosystem.qmd)
-3. [How to contribute](03-contributing.qmd)
+2. [The Stan ecosystem](02-stan-ecosystem.qmd)
+3. [How to contribute](03-how-to-contribute.qmd)
 4. [Finding information](04-find-information.qmd)
 5. [Checklist](05-checklist.qmd)

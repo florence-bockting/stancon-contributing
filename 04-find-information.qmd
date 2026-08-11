@@ -51,7 +51,7 @@ your question to the right resource.
 ### How-to guides ("Solve my problem")
 
 + *"How do I fit a Stan model?"*
-  - see [Stan user guide](https://mc-stan.org/docs/2_39/user-guide/index.html)
+  - see [Stan user guide](https://mc-stan.org/docs/stan-users-guide/)
 + *"How do I plot MCMC draws with bayesplot?"*
   - see [Vignette in bayesplot](https://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html)
 + *"How do I perform leave-one-out cross validation with loo?"*

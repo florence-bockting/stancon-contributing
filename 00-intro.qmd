@@ -1,0 +1,69 @@
+---
+format:
+  revealjs:
+    output-file: 00-intro-slides.html
+    incremental: true
+---
+
+# Organisational aspects
+
+
+## General Organisation
+
+::: {.fragment}
++ **Where:** 
+    - English Park - Geijer lecture hall
++ **When:** 
+    - Monday, August 17, 13:00 - 16:00
++ **Instructors:**
+    - Aki Vehtari
+    - Steve Bronder
+    - Brian Ward
+    - Florence Bockting
+:::
+
+::: {.fragment}
+
+### Extra: Hackathon on Friday
+
+::: {.nonincremental}
++ **Where:**
++ **When:**
++ **What:**
+:::
+
+:::
+
+## Your Turn!
+
+Please open the following link to a [mentimeter poll](https://www.menti.com/alt3e2mhmcbs)
+
+![](img/poll_qr.png){fig-alt="QR code linking to stancon-contributing poll" width="30%" fig-align="center" .nostretch}
+
+
+## Collaborative notes {.unnumbered}
+
+During the session we keep a [shared notepad](https://hackmd.io/@EVsglo65Sp-6aWs8tjqS7A/ByZOpDO8Mx/edit). 
+You can add questions, comments, and links for sharing with others etc. there. 
+No account needed, just open the link and start typing.
+
+![](img/hackmd_qr.png){fig-alt="QR code linking to the shared HackMD notepad" width="30%" fig-align="center" .nostretch}
+
+But of course ...
+
+## ... we are also always happy to talk with you!
+
+You can always talk with us
+
+- during the tutorial session
+- the entire week (in person, Slack, GitHub)
+- or reach us later via e-mail, GitHub, Slack, Stan Discourse
+
+## Contents
+
+1. What is Stan?
+2. The Stan ecosystem
+3. How to contribute to Stan?
+4. Where to find information?
+5. Contributing: Checklist
+6. Open Discussion/Question Round

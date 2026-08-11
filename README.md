@@ -48,6 +48,7 @@ RevealJS slides must be rendered with the **slides profile**. The default book p
 ### One section
 
 ```bash
+quarto render --profile slides 00-intro.qmd
 quarto render --profile slides 01-what-is-stan.qmd
 quarto render --profile slides 02-stan-ecosystem.qmd
 quarto render --profile slides 03-how-to-contribute.qmd

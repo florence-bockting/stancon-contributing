@@ -1,0 +1,17 @@
+---
+format:
+  revealjs:
+    output-file: tutorial_presi.html
+---
+
+{{< include 00-intro.qmd >}}
+
+{{< include 01-what-is-stan.qmd >}}
+
+{{< include 02-stan-ecosystem.qmd >}}
+
+{{< include 03-how-to-contribute.qmd >}}
+
+{{< include 04-find-information.qmd >}}
+
+# Open Floor: Questions & Comments

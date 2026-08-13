@@ -41,6 +41,22 @@ quarto render
 
 Output: `_book/index.html` — open this in a browser for the full workshop handout with navigation between sections.
 
+This also builds `_book/Contributing-to-Stan.pdf`, and the HTML book shows a **Download PDF** link in the sidebar.
+
+### PDF requirements
+
+The PDF is built with LaTeX. If you don't have a TeX installation, install Quarto's bundled one once:
+
+```bash
+quarto install tinytex
+```
+
+To skip the PDF while drafting (it adds a few LaTeX passes to every render):
+
+```bash
+quarto render --to html
+```
+
 ## Render slides
 
 RevealJS slides must be rendered with the **slides profile**. The default book profile does not support slide output.
@@ -77,6 +93,13 @@ quarto render --profile slides 01-what-is-stan.qmd \
                04-find-information.qmd \
                05-checklist.qmd
 ```
+
+### The slides deck for the tutorial
+```bash
+quarto render --profile slides tutorial_presi.qmd --output tutorial_presi.html
+```
+
+Then open `tutorial_presi.html`.
 
 ## Preview while editing
 

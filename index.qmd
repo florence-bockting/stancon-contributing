@@ -1,12 +1,36 @@
+::: {.content-visible when-format="html"}
 ::: {.stan-logo-hero}
 ![](img/stan_logo.png){fig-alt="Stan logo" .stan-logo}
 :::
-
-This is the material for the tutorial on contributing to the Stan ecosystem at StanCon 2026.
+:::
 
 ## Goals {.unnumbered}
 
-TODO
+This material is for anyone [interested in contributing to Stan but unsure
+where to start]{.hl}. By the end of the tutorial, you will be able to:
+
++ **Place yourself in the ecosystem**: Know which projects make up Stan, from
+  the compiler and math library through `CmdStan` to the language interfaces
+  and workflow packages, and work out which repository a given contribution
+  belongs in.
++ **Pick a contribution that fits you**: Recognise the full range of ways to
+  help, from answering questions on Stan Discourse, to filing bug reports and
+  feature requests, improving documentation, writing case studies, and
+  contributing code.
++ **Reach out effectively**: Open a GitHub issue or pull request that
+  maintainers can act on, and know when Discourse is the better place to start
+  the conversation instead.
++ **Find the right information**: Match a question to the right resource among
+  user guides, API documentation, case studies, and articles.
++ **Follow a concrete first contribution**: The
+  [checklist](05-checklist.qmd) walks step by step through the practicalities.
+  It currently focuses on the R packages in the Stan ecosystem, though most of
+  the workflow carries over to the other interfaces.
+
+You do not need to be a professional software developer or statistician, and
+you do not need prior open-source experience.
+
+::: {.content-visible when-format="html"}
 
 ## Contents {.unnumbered}
 
@@ -15,3 +39,5 @@ TODO
 3. [How to contribute](03-how-to-contribute.qmd)
 4. [Finding information](04-find-information.qmd)
 5. [Checklist](05-checklist.qmd)
+
+:::

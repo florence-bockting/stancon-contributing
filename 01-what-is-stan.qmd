@@ -7,9 +7,9 @@ format:
 
 # What is Stan?
 
-By the end of this section, you'll understand that Stan is more than a 
-probabilistic programming language for specifying statistical models; it is 
-also an open-source community and a broader software ecosystem.
+By the end of this section, you'll understand that Stan is a 
+probabilistic programming language for specifying statistical models, 
+an open-source community, as well as a broader software ecosystem.
 
 ---
 

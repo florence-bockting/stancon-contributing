@@ -8,12 +8,16 @@ format:
 # Organisational aspects
 
 
-## General Organisation
+## Introduction
+
+:::: {.columns}
+
+::: {.column width="55%"}
 
 ::: {.fragment}
-+ **Where:** 
++ **Where:**
     - English Park - Geijer lecture hall
-+ **When:** 
++ **When:**
     - Monday, August 17, 13:00 - 16:00
 + **Instructors:**
     - Aki Vehtari
@@ -22,21 +26,32 @@ format:
     - Florence Bockting
 :::
 
+:::
+
+::: {.column width="45%"}
+
 ::: {.fragment}
++ **Material:**
+    - Online book + PDF
+    - [florence-bockting.github.io/stancon-contributing](https://florence-bockting.github.io/stancon-contributing/)
 
+::: {.fragment}
+![](img/material_qr.png){fig-alt="QR code linking to the tutorial material" width="45%" fig-align="center" .nostretch}
+:::
+:::
+
+:::
+
+::::
+
+::: {.fragment}
 ### Extra: Hackathon on Friday
-
-::: {.nonincremental}
-+ **Where:**
-+ **When:**
-+ **What:**
 :::
 
-:::
+## Introduction: Your Turn!
 
-## Your Turn!
+Please open the following link to a [mentimeter poll](https://www.menti.com/alt3e2mhmcbs).
 
-Please open the following link to a [mentimeter poll](https://www.menti.com/alt3e2mhmcbs)
 
 ![](img/poll_qr.png){fig-alt="QR code linking to stancon-contributing poll" width="30%" fig-align="center" .nostretch}
 
@@ -44,19 +59,16 @@ Please open the following link to a [mentimeter poll](https://www.menti.com/alt3
 ## Collaborative notes {.unnumbered}
 
 During the session we keep a [shared notepad](https://hackmd.io/@EVsglo65Sp-6aWs8tjqS7A/ByZOpDO8Mx/edit). 
-You can add questions, comments, and links for sharing with others etc. there. 
+You can add questions, comments, and links for sharing with others there. 
 No account needed, just open the link and start typing.
 
 ![](img/hackmd_qr.png){fig-alt="QR code linking to the shared HackMD notepad" width="30%" fig-align="center" .nostretch}
 
-But of course ...
+Of course you can also...
 
-## ... we are also always happy to talk with you!
+## ... contact us
 
-You can always talk with us
-
-- during the tutorial session
-- the entire week (in person, Slack, GitHub)
+- during the tutorial session and the entire week
 - or reach us later via e-mail, GitHub, Slack, Stan Discourse
 
 ## Contents
@@ -65,5 +77,4 @@ You can always talk with us
 2. The Stan ecosystem
 3. How to contribute to Stan?
 4. Where to find information?
-5. Contributing: Checklist
-6. Open Discussion/Question Round
+5. Open Discussion/Question Round

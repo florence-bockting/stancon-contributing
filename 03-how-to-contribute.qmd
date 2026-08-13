@@ -127,7 +127,6 @@ There are many ways to contribute to Stan, including:
 ::: {.fragment}
 **1. Initial contact**
 
-  + post on the [Stan Discourse](https://discourse.mc-stan.org) to reach the team
   + post case study or tutorial idea in the [Stan Discourse](https://discourse.mc-stan.org) first
 :::
 
@@ -182,8 +181,7 @@ Some packages have templates others don't, but overall a good PR description sho
 **Before you start:**
 
 + Have you read the contributing guidelines and [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)?
-+ Contributing to Stan core libraries (e.g., `stan`, `math`, `stanc3`)?
-  + Have you checked the [Developer Wiki](https://github.com/stan-dev/stan/wiki)?
++ Contributing to Stan core libraries (e.g., `stan`, `math`, `stanc3`)? Checkout [Developer Wiki](https://github.com/stan-dev/stan/wiki)?
 + Is your PR small and focused on one logical change?
 + Not ready for review yet? Open it as a **Draft PR** so reviewers know to hold off.
 
@@ -237,7 +235,7 @@ Some packages have templates others don't, but overall a good PR description sho
 + Documentation or vignette renders locally
 + Tests and `devtools::check()` pass
 + `NEWS.md` entry added
-+ If you used an AI assistant, this is disclosed and the changes were reviewed critically
++ If you used an AI assistant, please disclose and review changes critically
 + For the full checklist, see [checklist](#sec-checklist)
 
 :::
@@ -260,6 +258,7 @@ Some packages have templates others don't, but overall a good PR description sho
 + [Stan AI Contribution Guideline](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)
 + Use your own words when writing the PR description and comments in a PR review process
 + Review all changes made by an AI assistant critically and ask yourself:
-  - Is this change correct? Do I need this change? Is this change in the scope of the PR?
+  - Is this change correct? 
+  - Do I need this change? 
+  - Is this change in the scope of the PR?
 + When in doubt about something, ask rather the Stan developers than the AI assistant
-+ TODO

@@ -9,31 +9,41 @@ format:
 # Where to find information?
 
 By the end of this section, you'll have a good sense of the main Stan
-resources, things like user guides, tutorials, case studies, API
-documentation, and scientific articles, and where to look depending
-on what you're trying to find out. We'll walk through how to match
-your question to the right resource.
+resources including user guides, tutorials, case studies, and API
+documentation. We'll walk through how to match your question to the
+right resource.
 
 ---
 
 ## Different layers of documentation
-+ different layers of documentation
-+ mental model following the [Diátaxis](https://diataxis.fr/) framework:
+
+The [Diátaxis](https://diataxis.fr/) framework provides a useful way to think
+about the different types of content that make up documentation. It divides
+documentation into four categories:
 
 ::: {.fragment}
 | Type | Focus | Stan examples |
 | :---- | :----- | :------------ |
-| Reference | what | Function/package index, Stan math docs, Stan reference manual |
-| How-to guides | solve my problem | Vignettes, case studies |
-| Tutorials | learn by doing | User's Guide walkthroughs, example-models |
-| Explanation | why it's designed this way | Wiki, discussions on Discourse |
+| Reference | What is this? | Function/package index, Stan math docs, Stan reference manual |
+| How-to guides | How do I solve this? | Vignettes, case studies |
+| Tutorials | How do I get started? | User's Guide walkthroughs, example-models |
+| Explanation | Why is it like this? | Wiki, discussions on Discourse |
+:::
+
+::: {.fragment}
+The four are not a ranking, and no single document has to serve all of them.
+Most frustration with documentation comes from looking for one kind and
+finding another.
 :::
 
 ---
 
-### Reference ("What")
+### Reference ("What is this?")
 
-+ *"What counts as a valid Stan program? What are blocks, types, and constraints, and how do they behave?"*
+Dry, complete, factual descriptions of the machinery. Structured for lookup
+rather than reading front to back.
+
++ *"What is a valid Stan program? What are blocks, types, and constraints, and how do they behave?"*
   - see [Stan reference manual](https://mc-stan.org/docs/2_39/reference-manual/)
   - grammar/rules of the Stan language
   - analogous to a grammar book
@@ -48,7 +58,11 @@ your question to the right resource.
 
 ---
 
-### How-to guides ("Solve my problem")
+### How-to guides ("How do I solve this?")
+
+Recipes for a specific task, aimed at someone who already knows the basics and
+has a goal in mind. In the Stan ecosystem these are mostly vignettes, published
+on each package's website.
 
 + *"How do I fit a Stan model?"*
   - see [Stan user guide](https://mc-stan.org/docs/stan-users-guide/)
@@ -58,26 +72,34 @@ your question to the right resource.
   - see [Vignette in loo](https://mc-stan.org/loo/articles/loo2-example.html)
 + *"How do I estimate multivariate models in brms?"*
   - see [Vignette in brms](https://paulbuerkner.com/brms/articles/brms_multivariate.html)
-+ Etc.
 
 ---
 
-### Tutorials / Case Studies ("Learn by doing")
+### Tutorials / Case Studies ("How do I get started?")
 
-+ [Tutorials on Stan](https://mc-stan.org/learn-stan/tutorials.html#tutorials)
-+ Case Studies:
-  - [Stan website](https://mc-stan.org/learn-stan/case-studies.html)
-  - [Bayesian Workflow book](https://avehtari.github.io/Bayesian-Workflow/casestudies.html)
-  - [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
-+ Published papers
-  - [posterior: Tools for Working with Posterior Distributions in R](https://joss.theoj.org/papers/10.21105/joss.10526)
-  - [brms: An R Package for Bayesian Multilevel Models Using Stan](https://www.jstatsoft.org/article/view/v080i01)
-  - [Visualization in Bayesian workflow (bayesplot)](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378)
-  - [ArviZ: a modular and flexible library for exploratory analysis of Bayesian models](https://joss.theoj.org/papers/10.21105/joss.09889)
-  - etc.
+Guided lessons that take a newcomer through a complete, working example. The
+goal is not to solve your problem but to build familiarity. The path is chosen
+for you and is meant to succeed.
 
-### Explanation ("Why it's designed this way")
++ *"I have never used Stan. Where do I start?"*
+  - see [Tutorials](https://mc-stan.org/learn-stan/tutorials.html#tutorials)
++ *"How do these pieces fit into a full Bayesian workflow?"*
+  - see case studies on the [Stan website](https://mc-stan.org/learn-stan/case-studies.html),
+    in the [Bayesian Workflow book](https://avehtari.github.io/Bayesian-Workflow/casestudies.html),
+    and on [Aki Vehtari's website](https://users.aalto.fi/~ave/casestudies.html)
 
+### Explanation ("Why is it like this?")
+
+Context, design decisions, and alternatives considered. This is the material you
+read away from the keyboard, and the only category where opinion and history
+belong.
+
++ *"What is the reasoning behind a method, and how was it validated?"*
+  - see the paper accompanying the package, e.g.
+    [posterior](https://joss.theoj.org/papers/10.21105/joss.10526),
+    [brms](https://www.jstatsoft.org/article/view/v080i01),
+    [bayesplot](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12378),
+    [ArviZ](https://joss.theoj.org/papers/10.21105/joss.09889)
 + *"Why is Stan designed this way?"*
   - see [Discourse discussions](https://discourse.mc-stan.org)
   - see [Wiki](https://github.com/stan-dev/stan/wiki)
@@ -85,4 +107,5 @@ your question to the right resource.
 ---
 
 ### Note about design review
+
 https://github.com/stan-dev/design-docs

@@ -7,6 +7,7 @@ book:
   subtitle: "A Developer’s Guide to the Core, Interfaces, and First Contributions"
   author: "Florence Bockting"
   date: today
+  downloads: [pdf]
   chapters:
     - index.qmd
     - 01-what-is-stan.qmd
@@ -22,6 +23,13 @@ format:
     embed-resources: true
     code-fold: false
     css: book.css
+  pdf:
+    documentclass: scrreprt
+    papersize: a4
+    toc: true
+    number-sections: true
+    colorlinks: true
+    keep-tex: false
 
 execute:
   echo: true

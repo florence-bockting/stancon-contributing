@@ -50,11 +50,9 @@ format:
 
 ## Introduction: Your Turn!
 
-Please open the following link to a [mentimeter poll](https://www.menti.com/alt3e2mhmcbs).
-
-
-![](img/poll_qr.png){fig-alt="QR code linking to stancon-contributing poll" width="30%" fig-align="center" .nostretch}
-
++ What's your (current) primary programming language? (R / Python / C++)
++ Have you already contributed to open-source software? (Yes?)
++ Have you already contributed to Stan? (Yes?)
 
 ## Collaborative notes {.unnumbered}
 

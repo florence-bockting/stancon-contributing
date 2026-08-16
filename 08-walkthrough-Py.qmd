@@ -20,6 +20,23 @@ The contributing instructions are based on the
 [Contributing section](https://python.arviz.org/en/stable/contributing/index.html)
 in ArviZ.
 
+In the following, we will show the contributing workflow using Stan skills.
+You can get the skills from [https://github.com/florence-bockting/stancon-contributing](https://github.com/florence-bockting/stancon-contributing).
+Fork and clone the repository.
+Open the repository of interest (in this case `posterior`) and save the 
+stancon-contributing/skills folder under 
+
+  + `~/.claude/skills` (should also be read by Cursor)
+  + `~/.codex/skills`
+  + `~/.copilot/skills`
+
+depending on your LLM. Alternatively, use your LLM and prompt it: 
+```
+read the skills from <path>/stancon-contributing/skills into your global skill
+```
+Even if you don't use an LLM, the skills are useful on their own: they provide
+recipes for the tasks that come up again and again when contributing to an R package.
+
 You can work through the contribution yourself, using the skill as a checklist,
 or work through it as a dialogue with an LLM, as we do below.
 

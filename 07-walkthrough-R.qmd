@@ -14,8 +14,19 @@ Note that these skills are still a prototype.
 Please use them with care and report any problems you run into, so that we can
 learn how to improve them.
 
-You can get the skills from [https://github.com/florence-bockting/stancon-contributing](https://github.com/florence-bockting/stancon-contributing)
-by downloading the `skills/` folder.
+You can get the skills from [https://github.com/florence-bockting/stancon-contributing](https://github.com/florence-bockting/stancon-contributing).
+Fork and clone the repository.
+Open the repository of interest (in this case `posterior`) and save the 
+stancon-contributing/skills folder under 
+
+  + `~/.claude/skills` (should also be read by Cursor)
+  + `~/.codex/skills`
+  + `~/.copilot/skills`
+
+depending on your LLM. Alternatively, use your LLM and prompt it: 
+```
+read the skills from <path>/stancon-contributing/skills into your global skill
+```
 Even if you don't use an LLM, the skills are useful on their own: they provide
 recipes for the tasks that come up again and again when contributing to an R package.
 
@@ -56,8 +67,7 @@ Point the AI assistant at the skill and make sure it actually reads it.
 ::: {.turn .you}
 [You]{.speaker}
 ```
-Read skills for creating an issue.
-I detected the following problematic case:
+I want to create an issue in posterior for the following problematic case:
 
 example_draws() |>
    summarise_draws(char_fun = \(x) "word", mean)
@@ -111,8 +121,7 @@ To see the rest of the workflow, we tell the LLM to skip the first step
 ::: {.turn .you}
 [You]{.speaker}
 ```
-Read skills for creating an issue.
-I detected the following problematic case:
+I want to create an issue in posterior for the following problematic case:
 
 example_draws() |>
    summarise_draws(char_fun = \(x) "word", mean)
@@ -295,7 +304,6 @@ guideline (or checklist), or you can work through it as a dialogue with an LLM.
 ::: {.chat}
 ::: {.turn .you}
 [You]{.speaker}
-Read the skills. 
 I want to contribute a solution to the issue: https://github.com/stan-dev/posterior/issues/355
 
 How do I get started?
@@ -337,8 +345,18 @@ Skip this step and start with fresh local PR
 
 ## Check setup
 
-Next, we check whether your environment is set up as the package you contribute to
-expects it. For this, the skills ship an R script,
+First, we ensure that we have a fork and clone of the repo of interest.
+
+```
+# from R
+usethis::create_from_github("stan-dev/posterior", fork = TRUE)
+
+# from the shell, clones into ./posterior
+gh repo fork stan-dev/posterior --clone
+```
+
+Then, we check whether the environment is set up as expected. 
+For this, the skills ship an R script,
 `stan-r-package-contribution/scripts/check_environment_setup.R`, that runs a few
 automatic checks.
 

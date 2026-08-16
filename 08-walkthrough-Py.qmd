@@ -1,0 +1,779 @@
+---
+format:
+  revealjs:
+    output-file: 08-walkthrough-Py-slides.html
+---
+
+# Walkthrough: Contributing to ArviZ
+
+In this tutorial, we walk you through one example code contribution to
+`arviz-stats`. A subpackage of [ArviZ](https://python.arviz.org/en/stable/index.html),
+a Python package that provides diagnostics and visualizations 
+for the Bayesian workflow. This tutorial is the counterpart to
+[Walkthrough: Contributing to Stan's R packages](07-walkthrough-R.qmd).
+
+The contributing instructions for this workflow are described in
+[`skills/stan-python-package-contribution/SKILL.md`](https://github.com/florence-bockting/stancon-contributing/blob/main/skills/stan-python-package-contribution/SKILL.md),
+and the short version in form of a *checklist* is in
+[Contributing to ArviZ (Python)](05-checklist.qmd#sec-checklist-python).
+The contributing instructions are based on the 
+[Contributing section](https://python.arviz.org/en/stable/contributing/index.html)
+in ArviZ.
+
+You can work through the contribution yourself, using the skill as a checklist,
+or work through it as a dialogue with an LLM, as we do below.
+
+## Example
+
+**The change:** add the Brier score to `metrics()`, mirroring `measure_brier` on
+loo's `pred_measure` branch.
+
+`metrics()` already computes accuracy for a binary outcome. The goal is that
+`kind="brier"` works the same way:
+
+```py
+from arviz_base import load_arviz_data
+from arviz_stats import metrics
+
+dt = load_arviz_data("anes")
+metrics(dt, kind="acc")     # works today
+metrics(dt, kind="brier")   # what we want to add
+```
+
+## Claim the issue, and check the feature does not already exist
+
+ArviZ has explicit etiquette here, and it comes *before* any code:
+
++ **comment on the issue before starting work**
++ if the issue is already assigned, ask the assignee first
++ the comment is yours to write and post. An LLM can help you draft it; do not
+let it post for you
+
+## Create the issue
+
+We will create an issue with assistance from an LLM:
+
+::: {.chat}
+
+::: {.turn .you}
+[You]{.speaker}
+Read the skills in stancon-contributing/skills
+I want to add a function to Arviz-stats and for this I want to write first an Issue.
+Support me drafting it.
+
+Here is the idea: add the Brier score to `metrics()`, mirroring `measure_brier` on
+loo's `pred_measure` branch.
+
+`metrics()` already computes accuracy for a binary outcome. The goal is that
+`kind="brier"` works the same way:
+
+```py
+from arviz_base import load_arviz_data
+from arviz_stats import metrics
+
+dt = load_arviz_data("anes")
+metrics(dt, kind="acc")     # works today
+metrics(dt, kind="brier")   # what we want to add
+```
+:::
+
+After some clarification questions...
+
++ What is the problem?
++ What is the current approach?
++ Is there a related PR?
++ What is the scope of the PR (small, medium, large)?
++ Do I want to work on the problem?
+
+... the LLM provides a draft for a **feature request**
+which needs to be checked by the user.
+
+::: {.artifact}
+[▤ issue-draft.md]{.filename}
+
+```markdown
+
+# Add Brier score to metrics()
+
+## The problem
+
+`metrics()` cannot compute the Brier score.
+
+`metrics()` already supports binary outcomes through `kind="acc"` and
+`kind="acc_balanced"`. Those score a hard classification. The Brier score
+scores the predicted probabilities instead, so it is the natural companion
+measure and its absence is inconsistent.
+
+## What I currently do instead
+
+I compute it by hand from the posterior predictive draws.
+
+## Proposed solution (optional)
+
+Add `kind="brier"` so it works the same way as the existing binary kinds:
+
+    from arviz_base import load_arviz_data
+    from arviz_stats import metrics
+
+    dt = load_arviz_data("anes")
+    metrics(dt, kind="acc")     # works today
+    metrics(dt, kind="brier")   # what this issue asks for
+
+This mirrors `measure_brier` in the loo package.
+
+## Scope
+
+- [x] Small and self-contained — one function, no API change
+- [ ] Medium — touches several functions or adds an argument to a public API
+- [ ] Opens a design discussion
+
+## Related
+
+- `measure_brier` in stan-dev/loo#363 ("Adding `pred_measure` feature",
+  draft, branch `pred_measure`).
+- Existing binary kinds in `metrics()`: `acc`, `acc_balanced`.
+
+## Would you be willing to work on this?
+
+Yes.
+
+```
+
+:::
+:::
+
+## Setup environment
+
+ArviZ has a modular stack consisting of three modules:
+
+| Repository | Holds | Your change goes here if… |
+| :-- | :-- | :-- |
+| `arviz-base` | data structures, `DataTree`/`InferenceData`, converters | you are changing how data is *represented* |
+| `arviz-stats` | statistics, diagnostics, LOO, metrics | you are computing a *number* |
+| `arviz-plots` | plots, multi-backend rendering | you are drawing something |
+
+This mirrors the "which stan-dev repository?" question from
+[The Stan ecosystem](02-stan-ecosystem.qmd). A new metric is a number, so:
+`arviz-stats`.
+
+::: {.chat}
+
+::: {.turn .you}
+[You]{.speaker}
+I want to contribute to Arviz. How do I get started?
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+
+Here is the map for a Python contribution:
+
+```
+Orient    1. Pick the right repository of the three
+          2. Comment on the issue to claim it; check the feature does not exist
+Set up    3. Fork, clone, add the upstream remote
+          4. Install: tox, plus an editable install
+          5. Install the pre-commit hooks
+          6. Branch (main is protected by a hook)
+Change    7. Write the code at the right architectural layer
+          8. numpydoc docstrings; update every duplicated list
+Verify    9. Parametrised pytest tests with computed expected values
+         10. Check no test skips for a missing dependency; run tox
+Submit   11. Rebase on upstream/main, push
+         12. Do NOT edit CHANGELOG.md; write a changelog-worthy PR title
+Review       Respond to reviewers  →  stan-issue-and-pr
+```
+
+**Stage: Orient — step 1, pick the repository.**
+
+ArviZ is three packages now. Which one you target depends on what your change produces, so we settle that before anything else.
+
+Every code contribution runs through the same five stages:
+
+```
+Orient → Set up → Change → Verify → Submit → Review
+```
+:::
+
+Now, we would declare which Issue we want to work on in which repository.
+In the current example this is `arviz-stats`.
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: Set up — step 3, fork and clone.**
+
+origin becomes your fork. upstream becomes the real project. Step 11 rebases onto upstream/main, so both remotes must exist from the start.
+
+You are currently in `<some branch>`, so pick a directory outside it first.
+
+```bash
+gh repo fork arviz-devs/arviz-stats --clone
+cd arviz-stats
+git remote add upstream git@github.com:arviz-devs/arviz-stats.git
+```
+:::
+
+Create fork and clone it. Setup the remote.
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: set up — step 4, install.**
+
+First, a read-only look, so we do not build a second environment on top of one you already have:
+
+```bash
+ls -d .venv env 2>/dev/null; python3 -c "import arviz_stats, sys; print(arviz_stats.__file__)" 2>&1 | tail -1
+```
+
+Shall I run this, or will you?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+I got: `ModuleNotFoundError: No module named 'arviz_stats'`
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: set up — step 4, install.**
+
+The editable install makes import arviz_stats read the file you edit, not a copy from PyPI. Without it your changes do nothing.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install tox
+pip install -e ".[test]"
+```
+
+arviz-stats needs only numpy and scipy, so this is quick. The [test] extra adds pytest and the fixtures; without it the test files do not import.
+
+Run it, or shall I?
+
+:::
+
+::: {.callout-note}
+## This transcript was recorded on Linux
+
+The two lines above are the only ones in this walkthrough that differ by
+platform. On Windows the interpreter is `python` (or `py -3`), and `venv` writes
+`Scripts\` where macOS and Linux write `bin/`:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+In Git Bash it is `source .venv/Scripts/activate`. Everything after the
+activation line — `pip`, `tox`, `pytest`, `pre-commit`, `git` — is identical on
+all three platforms. The skill asks the agent to establish your platform at this
+step and give you the matching form; see
+[Which shell the commands assume](06-skills.qmd#which-shell-the-commands-assume).
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+Ok. All installed.
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: set up — step 4, confirm the install.**
+
+An editable install points at your working copy. If it points into site-packages, your edits are invisible and step 7 wastes an hour:
+
+```bash
+.venv/bin/python -c "import arviz_stats; print(arviz_stats.__file__)"
+```
+Shall I run this?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+Returned: /u/21/wa.bocktif1/unix/GitHub/arviz-stats/src/arviz_stats/__init__.py
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+That path is your clone, so edits take effect immediately.
+
+**Stage: set up — step 5, install the pre-commit hooks.**
+
+ArviZ enforces style with ruff and pylint at commit time. The hooks fix formatting on your machine instead of failing in public CI:
+
+```bash
+.venv/bin/pip install pre-commit pylint && .venv/bin/pre-commit install
+```
+
+pylint is installed here as well, because its hook is declared `language: system`. Pre-commit does not build an environment for that hook. It calls pylint on the PATH, and fails if the package is absent. Every other hook, ruff included, brings its own pinned copy.
+
+Run it, or shall I?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+done
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: set up — step 5, see what the hooks do.**
+
+Run them once now, on a clean tree, so you learn what they change before one rewrites a file you are mid-way through editing:
+
+```bash
+.venv/bin/pre-commit run --all-files
+```
+
+The first run downloads the pinned tool versions, so it is slow. Run it, or shall I?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+done
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: set up — step 6, branch.**
+
+Cut it from a main that matches upstream, or you inherit conflicts at step 11:
+
+```bash
+git checkout main
+git pull upstream main
+git checkout -b add-brier-score
+```
+Run it, or shall I?
+:::
+:::
+
+## Code contribution
+
+Steps 7 and 8 in the contribution workflow refer to making the code contribution
+and adding function documentation using docstrings.
+
+R packages are flat: one file in `R/`, one entry in `NAMESPACE`. arviz-stats is
+layered, and a new metric touches each layer in turn. Docstrings follow
+**numpydoc**.
+
+The computation goes in the array layer, next to `_mae`, `_mse` and `_acc`:
+
+``` {.python filename="src/arviz_stats/base/diagnostics.py"}
+@staticmethod
+def _brier(observed, predicted):
+    """Compute the Brier score.
+
+    Parameters
+    ----------
+    observed: array-like of shape = (n_outputs,)
+        Ground truth (correct) target values, coded as 0 or 1.
+    predicted: array-like of shape = (n_outputs)
+        Predicted probabilities of the outcome being 1.
+
+    Returns
+    -------
+    mean: float
+        Brier score. Lower values indicate better calibrated predictions.
+    std_error: float
+        Standard error of the Brier score.
+    """
+    n_obs = len(observed)
+    sq_e = (predicted - observed) ** 2
+    mean = np.mean(sq_e)
+    std_error = np.std(sq_e) / n_obs**0.5
+    return mean, std_error
+```
+
+We need additional validation and documentation in the public layer:
+
+``` {.python filename="src/arviz_stats/metrics.py"}
+-    valid_kind = ["mae", "rmse", "mse", "acc", "acc_balanced"]
++    valid_kind = ["mae", "rmse", "mse", "acc", "acc_balanced", "brier"]
+```
+
+Furthermore, we need to update the docstring at two places. `valid_kind` is
+validated in one place, but the list of options is written out again in the
+docstring of the public `metrics()` *and* in the docstring of the private
+`_metrics()`. 
+
+``` {.python filename="src/arviz_stats/metrics.py"}
+def metrics(data, kind="rmse", var_name=None, sample_dims=None, round_to=None):
+    """
+    Compute performace metrics.
+
+    Currently supported metrics are mean absolute error, mean squared error and
+    root mean squared error.
+    For classification problems, accuracy and balanced accuracy are also supported.
+
+    Parameters
+    ----------
+    data: DataTree or InferenceData
+        It should contain groups `observed_data` and `posterior_predictive`.
+    kind: str
+        The kind of metric to compute. Available options are:
+
+        - 'mae': mean absolute error.
+        - 'mse': mean squared error.
+        - 'rmse': root mean squared error. Default.
+        - 'acc': classification accuracy.
+        - 'acc_balanced': balanced classification accuracy.
+>>      - 'brier': Brier score for binary classification.
+...
+```
+
+``` {.python filename="src/arviz_stats/metrics.py"}
+def _metrics(observed, predicted, kind, round_to):
+    """Compute performance metrics.
+
+    Parameters
+    ----------
+    observed: DataArray
+        Observed data.
+    predicted: DataArray
+        Predicted data.
+    kind: str
+        The kind of metric to compute. Available options are:
+
+        - 'mae': mean absolute error.
+        - 'mse': mean squared error.
+        - 'rmse': root mean squared error. Default.
+        - 'acc': classification accuracy.
+        - 'acc_balanced': balanced classification accuracy.
+>>      - 'brier': Brier score for binary classification.
+...
+```
+
+## Add test with `pytest`
+
+Tests are parametrised, using a shared fixture:
+
+``` {.python filename="tests/test_metrics.py"}
+@pytest.mark.parametrize(
+    "kind, round_to, expected_mean, expected_se",
+    [
+        ("acc", 2, 0.43, 0.19),
+        ("acc_balanced", "2g", 0.46, 0.039),
+>>      ("brier", "2g", 0.26, 0.0094),
+    ],
+)
+def test_metrics_acc(datatree_binary, kind, round_to, expected_mean, expected_se):
+```
+
+::: {.chat}
+::: {.turn .you}
+[You]{.speaker}
+Changed code, docstring, and added test.
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+
+**Stage: verify — step 10, run the tests.**
+
+A missing dependency skips a test instead of failing it. -rs prints one line per skip, so you see whether your new test actually ran.
+
+```bash
+pytest tests/test_metrics.py -q -rs
+```
+Run it, or shall I?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+(.venv) wa.bocktif1@l26-0069:~/GitHub/arviz-stats$ pytest tests/test_metrics.py -q -rs
+............................................                                                            [100%]
+44 passed in 3.80s
+:::
+
+::: {.callout-note collapse = "true"}
+## Add-on: Debugging (click to expand)
+In case you need to debug something in your Python code you can do the following:
+
++ Go to the function that you want to debug
++ Insert a `breakpoint()` in the line from where you want to start looking-up the code
+
+Example:
+
+```py
+    @staticmethod
+    def _brier(observed, predicted):
+        """Compute the Brier score.
+
+        Parameters
+        ----------
+        observed: array-like of shape = (n_outputs,)
+            Ground truth (correct) target values, coded as 0 or 1.
+        predicted: array-like of shape = (n_outputs)
+            Predicted probabilities of the outcome being 1.
+
+        Returns
+        -------
+        mean: float
+            Brier score. Lower values indicate better calibrated predictions.
+        std_error: float
+            Standard error of the Brier score.
+        """
+        n_obs = len(observed)
+>>      breakpoint()
+        sq_e = (predicted - observed) ** 2
+        mean = np.mean(sq_e)
+        std_error = np.std(sq_e) / n_obs**0.5
+        return mean, std_error
+```
+
++ Then run the test with the `--pdb` flag
++ Use for example `n(ext)` or `s(tep)` to navigate through 
+your code and evaluate variables (see [Python Debugger](https://docs.python.org/3/library/pdb.html#pdbcommand-commands))
+
+```bash
+(.venv) wa.bocktif1@l26-0069:~/GitHub/arviz-stats$ pytest tests/test_metrics.py --pdb
+=========================================== test session starts ===========================================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0
+rootdir: /u/21/wa.bocktif1/unix/GitHub/arviz-stats
+configfile: pyproject.toml
+plugins: cov-7.1.0
+collected 44 items                                                                                        
+
+tests/test_metrics.py ..............................
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PDB set_trace (IO-capturing turned off) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> /u/21/wa.bocktif1/unix/GitHub/arviz-stats/src/arviz_stats/base/diagnostics.py(1746)_brier()
+-> sq_e = (predicted - observed) ** 2
+(Pdb) n_obs
+7
+(Pdb) n
+> /u/21/wa.bocktif1/unix/GitHub/arviz-stats/src/arviz_stats/base/diagnostics.py(1747)_brier()
+-> mean = np.mean(sq_e)
+(Pdb) n
+> /u/21/wa.bocktif1/unix/GitHub/arviz-stats/src/arviz_stats/base/diagnostics.py(1748)_brier()
+-> std_error = np.std(sq_e) / n_obs**0.5
+(Pdb) mean
+<xarray.DataArray 'y' ()> Size: 8B
+array(0.25816518)
+(Pdb) 
+```
+
++ quit the debug mode with `q`
+
+:::
+
+::: {.chat}
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: verify — step 10, run the full environment.**
+
+44 passed, no skips. Good. tox -e full sets ARVIZ_REQUIRE_ALL_DEPS=TRUE, so a skip becomes an error there. It is close to what CI runs. The first run is slow.
+
+```bash
+tox -e full
+```
+Run it, or shall I?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+Ends with
+
+```
+================================= 2727 passed, 2 skipped in 109.59s (0:01:49) =================================
+build: _exit> python /u/21/wa.bocktif1/unix/GitHub/arviz-stats/.venv/lib/python3.12/site-packages/pyproject_api/_backend.py True flit_core.buildapi
+  full: OK (116.82=setup[3.13]+cmd[113.69] seconds)
+  congratulations :) (116.87 seconds)
+```
+:::
+
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: verify — step 10, last part.**
+
+2727 passed, 2 skipped.
+
+Style is enforced by pre-commit here, so a lint failure blocks the commit. This runs the same checks now:
+
+```bash
+tox -e check
+```
+Run it, or shall I?
+:::
+:::
+
+First time failed for *end of files*.
+
+```bash
+check for added large files..............................................Passed
+check toml...............................................................Passed
+check for merge conflicts................................................Passed
+fix end of files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing src/arviz_stats/base/diagnostics.py
+
+don't commit to branch...................................................Passed
+trim trailing whitespace.................................................Passed
+ruff check...............................................................Passed
+ruff format..............................................................Passed
+Disallow print statements................................................Passed
+pylint...................................................................Passed
+pre-commit hook(s) made changes.
+```
+
+This is fixed directly, so just run command again:
+
+```bash
+(.venv) wa.bocktif1@l26-0069:~/GitHub/arviz-stats$ tox -e check
+check: commands[0]> pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+check: commands[1]> pre-commit run --all-files --show-diff-on-failure
+check for added large files..............................................Passed
+check toml...............................................................Passed
+check for merge conflicts................................................Passed
+fix end of files.........................................................Passed
+don't commit to branch...................................................Passed
+trim trailing whitespace.................................................Passed
+ruff check...............................................................Passed
+ruff format..............................................................Passed
+Disallow print statements................................................Passed
+pylint...................................................................Passed
+```
+
+## Wrapping up
+
+### Git add, commit, rebase, and push
+Now, we can go ahead and add and commit the changes via git.
+Try to keep your commit history clean and commit not all files at once but in reasonable
+conceptual chunks that let a reviewer infer your workflow.
+
+Unlike the R packages, ArviZ asks you to **rebase onto `upstream/main` before
+pushing**. This puts your commits on top of the current upstream, so the pull
+request shows your change and nothing else. It is why we added the `upstream`
+remote back in step 3.
+
+::: {.chat}
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: submit — step 11, commit, rebase, and push.**
+
+check passed. add names exactly the files that belong to this change, so nothing unrelated joins the commit. fetch downloads the new upstream work but changes nothing locally. rebase puts your commits on top of it. push sends the branch to your fork, and the work becomes public in your name.
+
+```bash
+git add src/arviz_stats/base/diagnostics.py src/arviz_stats/metrics.py tests/test_metrics.py
+git commit -m "Add Brier score to metrics()"
+git fetch upstream
+git rebase upstream/main
+git push -u origin add-brier-score
+```
+One at a time, not as a block. If the rebase reports conflicts, stop and we work through them together. If the change is not finished, mark the pull request `[WIP]` — that is the project's convention.
+
+Run them, or shall I?
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+Skip this step as this is a demo.
+But support with creating a PR description.
+:::
+:::
+
+::: {.callout-note}
+## Different to R-packages: do **not** edit the changelog
+
+`CHANGELOG.md` in arviz-stats is generated at release time from merged pull
+request titles.
+
+There is no "unreleased" section to append to. Editing it by hand creates a
+conflict at the next release.
+
+**Your PR title becomes the changelog entry**, so it carries the weight that
+`NEWS.md` carries in the R packages. Write it accordingly:
+
+* Good: `Add Brier score to metrics()`
+* Avoid: `update metrics`
+:::
+
+::: {.chat}
+::: {.turn .ai}
+[Claude Opus]{.speaker}
+**Stage: submit — step 12, the description.**
+
+arviz-stats has no pull request template, so we use the standard sections. CHANGELOG.md is generated from titles here, so do not edit it.
+
+The description must be your words. I ask, you answer, then we assemble.
+
+```
+1. In one sentence of your own: what can a user do now that they could not do before?
+2. Is there a decision a reviewer could question? 
+3. Did an AI assistant help you? Name what it did. ArviZ has no policy requiring
+this, but it is good practice and reviewers appreciate knowing.
+4. Who is the copyright holder? You, or your employer or university, if they own this work?
+```
+:::
+
+::: {.turn .you}
+[You]{.speaker}
+
+```
+1. `metrics()` supports now also the brier score.
+2. Not that I know.
+3. Yes, Claude Code assisted me. But I went over the changes myself.
+3. Aalto university
+```
+:::
+
+
+::: {.artifact}
+[▤ pr-description.md]{.filename}
+
+```markdown
+
+Title: Add Brier score to metrics()
+
+Closes #<ISSUE NUMBER>
+
+## Description
+
+`metrics()` now supports the Brier score. `_brier()` sits next to `_mae` and
+`_mse` in `base/diagnostics.py` and returns `(mean, std_error)` like they do.
+`"brier"` is added to `valid_kind` in `_metrics()` and to the `kind` list in
+both docstrings.
+
+## Breaking changes
+
+None.
+
+## Tests
+
+`test_metrics_acc` gains a `"brier"` case, with the expected mean and standard
+error computed from the `datatree_binary` fixture.
+
+`tox -e full`:
+
+    2727 passed, 2 skipped
+
+`tox -e check`:
+
+    check: OK
+
+## Documentation
+
+numpydoc docstring on `_brier()`, plus the `'brier'` entry in the `kind` list
+of `metrics()` and `_metrics()`.
+
+## Open questions
+
+- None
+
+## AI assistance
+
+Claude Code assisted with this change. I reviewed every line and can explain it.
+
+## Copyright and Licensing
+
+Copyright holder: Aalto University
+
+By submitting this pull request, the copyright holder agrees to license the
+submitted work under the repository's license, Apache License 2.0.
+```
+
+:::

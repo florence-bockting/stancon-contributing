@@ -78,7 +78,9 @@ interface, such as [`cmdstanr`](https://mc-stan.org/cmdstanr/) for R or
 [`cmdstanpy`](https://mc-stan.org/cmdstanpy/) for Python, that wraps
 [`CmdStan`](https://mc-stan.org/docs/cmdstan-guide/). 
 
-<br>
+<br> 
+
+::: {.fragment}
 
 `CmdStan` invokes
 
@@ -86,8 +88,11 @@ interface, such as [`cmdstanr`](https://mc-stan.org/cmdstanr/) for R or
 + the [`math`](https://mc-stan.org/math/) library (implementing built-in functions for distributions, linear algebra, ODE solvers, etc., along with automatic differentiation) and 
 + the [`stan`](https://github.com/stan-dev/stan) library (implementing the inference algorithms, such as HMC/NUTS). 
 
+::: {.fragment}
 The result is a standalone executable that the interface then runs to produce
 posterior samples.
+:::
+:::
 
 ---
 
@@ -179,12 +184,16 @@ Instead of writing a Stan model from scratch, you can use higher-level
 modelling frameworks that let you specify your model using formula syntax.
 Two example frameworks are 
 
+::: {.fragment}
+
 + [`brms`](https://paulbuerkner.com/brms/), which
 dynamically generates and compiles custom Stan code for your specified model,
 and 
 + [`rstanarm`](https://mc-stan.org/rstanarm/), which fits your model using
 a set of pre-compiled Stan programs for common model families (avoiding
 compilation time, at the cost of some flexibility).
+
+::: {.fragment}
 
 :::: {.columns}
 
@@ -239,6 +248,8 @@ fit <- rstanarm::stan_glm(
 :::
 
 ::::
+:::
+:::
 
 ---
 

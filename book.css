@@ -112,6 +112,140 @@ div.callout.callout-note.checklist ul > li::before {
   font-weight: 700;
 }
 
+/* ---------------------------------------------------------------------------
+   Chat transcript: ::: {.turn .you} / {.turn .ai} / {.turn .tool}
+   One speaker per card, label chip on the left rail. Used in the skills
+   chapter to show a real session instead of an undifferentiated wall of text.
+   --------------------------------------------------------------------------- */
+
+.chat {
+  margin: 1.5em 0;
+}
+
+.turn {
+  position: relative;
+  margin: 0 0 0.9em 0;
+  padding: 0.9em 1.1em 0.9em 1.15em;
+  border: 1px solid var(--stan-rule);
+  border-left: 4px solid var(--stan-rule);
+  border-radius: 0.35em;
+}
+
+/* Speaker chip. Written in the source as [You]{.speaker} rather than generated
+   from CSS, so it survives into the PDF download too. */
+.turn .speaker {
+  display: block;
+  margin-bottom: 0.45em;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.turn > *:first-child {
+  margin-top: 0;
+}
+
+.turn > *:last-child {
+  margin-bottom: 0;
+}
+
+/* What you type */
+.turn.you {
+  background-color: color-mix(in srgb, var(--stan-cream) 40%, #ffffff);
+  border-color: color-mix(in srgb, var(--stan-cream) 70%, var(--stan-rule));
+  border-left-color: color-mix(in srgb, var(--stan-cream) 45%, var(--stan-slate));
+}
+
+.turn.you .speaker {
+  color: color-mix(in srgb, var(--stan-cream) 30%, var(--stan-slate));
+}
+
+/* What the model answers */
+.turn.ai {
+  background-color: #ffffff;
+  border-color: color-mix(in srgb, var(--stan-logo-blue) 25%, var(--stan-rule));
+  border-left-color: var(--stan-logo-blue);
+}
+
+.turn.ai .speaker {
+  color: var(--stan-logo-blue);
+}
+
+/* Tool calls the model made on the way. Quieter than either speaker. */
+.turn.tool {
+  background-color: color-mix(in srgb, var(--stan-slate) 5%, #ffffff);
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--stan-slate) 25%, var(--stan-rule));
+  border-left-style: solid;
+  border-left-color: var(--stan-slate-light);
+  font-size: 0.92em;
+}
+
+.turn.tool .speaker {
+  font-family: var(--bs-font-monospace, monospace);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--stan-slate-light);
+}
+
+/* Code inside a turn: no double frame, it already sits in a card */
+.turn div.sourceCode,
+.turn pre {
+  margin-bottom: 0.6em;
+}
+
+/* A prompt is prose, so wrap it rather than clipping it off the card.
+   Tool output stays unwrapped — it is tabular and must keep its columns. */
+.turn.you pre,
+.turn.you pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.turn.tool div.sourceCode {
+  border-color: color-mix(in srgb, var(--stan-slate) 20%, var(--stan-rule));
+}
+
+/* ---------------------------------------------------------------------------
+   Artifact card: a file the session produced. Reuses the filename-bar language
+   of code cells, so a written file reads differently from a chat turn.
+   --------------------------------------------------------------------------- */
+
+.artifact {
+  margin: 1.5em 0;
+  border: 1px solid color-mix(in srgb, var(--stan-logo-blue) 35%, var(--stan-rule));
+  border-radius: 0.35em;
+  background-color: #ffffff;
+}
+
+/* Filename bar, written in the source as [▤ issue-draft.md]{.filename} */
+.artifact > p:first-child {
+  margin: 0;
+}
+
+.artifact .filename {
+  display: block;
+  padding: 0.35em 0.85em;
+  background-color: var(--stan-logo-blue);
+  color: var(--stan-cream);
+  border-radius: 0.3em 0.3em 0 0;
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Quarto wraps code cells in .code-copy-outer-scaffold, so match descendants */
+.artifact div.sourceCode,
+.artifact > pre {
+  margin: 0;
+  border: none;
+  border-radius: 0 0 0.3em 0.3em;
+  max-height: 32em;
+  overflow-y: auto;
+}
+
 /* Sidebar / TOC accents */
 .sidebar nav .nav-link.active,
 .sidebar nav .nav-link:hover,

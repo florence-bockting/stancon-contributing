@@ -105,7 +105,3 @@ belong.
   - see [Wiki](https://github.com/stan-dev/stan/wiki)
 
 ---
-
-### Note about design review
-
-https://github.com/stan-dev/design-docs

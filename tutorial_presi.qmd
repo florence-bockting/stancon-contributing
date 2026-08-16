@@ -14,4 +14,14 @@ format:
 
 {{< include 04-find-information.qmd >}}
 
+{{< include 06-skills.qmd >}}
+
 # Open Floor: Questions & Comments
+
+# Break - 15 min
+
+**Group allocation based on interests**
+
+  + Contributing to R/Python
+  + Contributing to C++
+  + Contributing to OCaml

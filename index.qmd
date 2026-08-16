@@ -23,9 +23,21 @@ where to start]{.hl}. By the end of the tutorial, you will be able to:
 + **Find the right information**: Match a question to the right resource among
   user guides, API documentation, case studies, and articles.
 + **Follow a concrete first contribution**: The
-  [checklist](05-checklist.qmd) walks step by step through the practicalities.
-  It currently focuses on the R packages in the Stan ecosystem, though most of
-  the workflow carries over to the other interfaces.
+  [checklist](05-checklist.qmd) walks step by step through the practicalities,
+  with a separate checklist for the R packages, the ArviZ Python packages, and
+  the Stan Math C++ library. These are three genuinely different processes —
+  different base branch, test runner, and changelog handling — so the chapter
+  ends with a table showing where they diverge.
++ **Use the contributor skills**: This repository ships a set of
+  [Agent Skills](06-skills.qmd) for the Stan contribution workflows. They work
+  with an LLM agent, and they work on their own as human-readable recipes,
+  issue templates, and a pre-pull-request check script.
++ **See it done end to end**: Two walkthrough chapters follow a real
+  contribution from finding an issue to writing the pull request, including the
+  steps that commonly go wrong — one to
+  [an R package](07-walkthrough-R.qmd), `posterior`, and one to
+  [a Python package](08-walkthrough-Py.qmd), `arviz-stats`. Both also show the
+  Agent Skills in this repository being used along the way.
 
 You do not need to be a professional software developer or statistician, and
 you do not need prior open-source experience.
@@ -39,5 +51,8 @@ you do not need prior open-source experience.
 3. [How to contribute](03-how-to-contribute.qmd)
 4. [Finding information](04-find-information.qmd)
 5. [Checklist](05-checklist.qmd)
+6. [The Stan contributor skills](06-skills.qmd)
+7. [Walkthrough: contributing to an R package](07-walkthrough-R.qmd)
+8. [Walkthrough: contributing to ArviZ](08-walkthrough-Py.qmd)
 
 :::

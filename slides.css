@@ -474,3 +474,118 @@
   pointer-events: none;
   background-color: transparent;
 }
+
+/* ---------------------------------------------------------------------------
+   Chat transcript on slides: ::: {.turn .you} / {.turn .ai} / {.turn .tool}
+   Same component as book.css, tightened for slide density.
+   --------------------------------------------------------------------------- */
+
+.reveal .chat {
+  margin: 0.4em 0;
+}
+
+.reveal .turn {
+  position: relative;
+  margin: 0 0 0.5em 0;
+  padding: 0.5em 0.7em;
+  border: 1px solid var(--stan-rule);
+  border-left: 4px solid var(--stan-rule);
+  border-radius: 0.3em;
+  font-size: var(--slide-body-font-size);
+  text-align: left;
+}
+
+.reveal .turn .speaker {
+  display: block;
+  margin-bottom: 0.25em;
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reveal .turn > *:first-child {
+  margin-top: 0;
+}
+
+.reveal .turn > *:last-child {
+  margin-bottom: 0;
+}
+
+.reveal .turn.you {
+  background-color: color-mix(in srgb, var(--stan-cream) 40%, #ffffff);
+  border-color: color-mix(in srgb, var(--stan-cream) 70%, var(--stan-rule));
+  border-left-color: color-mix(in srgb, var(--stan-cream) 45%, var(--stan-slate));
+}
+
+.reveal .turn.you .speaker {
+  color: color-mix(in srgb, var(--stan-cream) 30%, var(--stan-slate));
+}
+
+.reveal .turn.ai {
+  background-color: #ffffff;
+  border-color: color-mix(in srgb, var(--stan-logo-blue) 25%, var(--stan-rule));
+  border-left-color: var(--stan-logo-blue);
+}
+
+.reveal .turn.ai .speaker {
+  color: var(--stan-logo-blue);
+}
+
+.reveal .turn.tool {
+  background-color: color-mix(in srgb, var(--stan-slate) 5%, #ffffff);
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--stan-slate) 25%, var(--stan-rule));
+  border-left-style: solid;
+  border-left-color: var(--stan-slate-light);
+}
+
+.reveal .turn.tool .speaker {
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--stan-slate-light);
+}
+
+.reveal .turn pre {
+  margin: 0.3em 0;
+  box-shadow: none;
+}
+
+/* Prompts wrap; tool output keeps its columns */
+.reveal .turn.you pre,
+.reveal .turn.you pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Artifact card: a file the session produced */
+.reveal .artifact {
+  margin: 0.5em 0;
+  border: 1px solid color-mix(in srgb, var(--stan-logo-blue) 35%, var(--stan-rule));
+  border-radius: 0.3em;
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.reveal .artifact > p:first-child {
+  margin: 0;
+}
+
+.reveal .artifact .filename {
+  display: block;
+  padding: 0.25em 0.7em;
+  background-color: var(--stan-logo-blue);
+  color: var(--stan-cream);
+  border-radius: 0.25em 0.25em 0 0;
+  font-family: monospace;
+  font-size: 0.6em;
+  font-weight: 600;
+}
+
+.reveal .artifact div.sourceCode,
+.reveal .artifact > pre {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}

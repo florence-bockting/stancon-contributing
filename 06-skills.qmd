@@ -1,0 +1,199 @@
+---
+format:
+  revealjs:
+    output-file: 06-skills-slides.html
+    incremental: true
+---
+
+# The Stan contributor skills {#sec-skills}
+
+This repository ships a `skills/` folder next to the book. The book explains
+*why* a contribution looks the way it does; the skills carry [the commands, the
+order, and the traps]{.hl}.
+
+They are written as [Agent Skills](https://agentskills.io/), an open standard, so
+an agent such as Claude Code can load them. But every file in them is plain
+Markdown, so you can also just read them.
+
+::: {.callout-warning}
+## Still a prototype
+
+These skills were written for this tutorial and have not been used by many
+contributors yet. Use them with care, check what they tell you against the
+repository you are working in, and report problems at
+[stancon-contributing](https://github.com/florence-bockting/stancon-contributing/issues).
+:::
+
+---
+
+## The seven skills
+
+| Skill | Use it when you want to |
+| :-- | :-- |
+| `stan-contributing` | Start somewhere — pick a path and the right repository |
+| `stan-r-package-contribution` | Change an R package: posterior, bayesplot, loo, cmdstanr, brms, … |
+| `stan-python-package-contribution` | Change a Python package: arviz-base, arviz-stats, arviz-plots, cmdstanpy|
+| `stan-math-contribution` | Change C++ in stan-dev/math or stan-dev/stan (not tested, work in progress)|
+| `stan-issue-and-pr` | Write a bug report, feature request, or pull request description |
+| `stan-case-study` | Write and submit a case study or tutorial |
+| `stan-find-docs` | Find where something about Stan is documented |
+
+::: {.content-hidden when-format="revealjs"}
+
+`stan-contributing` is the entry point and routes to the others. The rest also
+fire on their own when you describe what you are doing.
+
+:::
+
+---
+
+## What is inside one
+
+A skill is a folder. The only required file is `SKILL.md`: a short YAML header
+with a `name` and a `description`, then the procedure in Markdown.
+
+```
+stan-r-package-contribution/
+├── SKILL.md          the procedure, step by step
+├── references/       worked-example.md, plots-and-vdiffr.md, vignettes.md
+└── scripts/          check_environment_setup.R
+```
+
++ **`SKILL.md`** is the recipe. An agent reads the `description` to decide when
+  the skill is relevant, and only then loads the rest.
++ **`references/`** hold the longer material a step points to — for example
+  `worked-example.md`, a transcript of a real contribution to
+  [posterior #238](https://github.com/stan-dev/posterior/issues/238) with the
+  commands that were actually run and the parts that went wrong.
++ **`templates/`** are files to copy out and fill in: `bug-report.md`,
+  `feature-request.md`, `pr-description.md`.
++ **`scripts/`** are runnable. `check_environment_setup.R` checks seven things
+  before you open a pull request — roxygen2 pin, dev packages, clean tree,
+  branch, `gh` authentication — and changes nothing.
+
+
+## Two ways to use them
+
+### With an agent
+
+Copy the folders into your agent's skills location and restart the session:
+
+```bash
+git clone https://github.com/florence-bockting/stancon-contributing.git
+mkdir -p ~/.claude/skills
+cp -r stancon-contributing/skills/stan-* ~/.claude/skills/
+```
+
+On Windows, in PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME\.claude\skills"
+Copy-Item -Recurse stancon-contributing\skills\stan-* "$HOME\.claude\skills\"
+```
+
+Then just describe what you are doing — no special syntax:
+
++ *"I'd like to contribute to Stan but I don't know where to start"*
++ *"I want to add a function to posterior — issue #238"*
++ *"help me write the PR description"*
+
+---
+
+### Without an agent
+
+Nothing here needs an LLM:
+
+::: {.fragment}
+
++ Read `SKILL.md` as a [numbered recipe]{.hl} for the workflow.
++ Copy `templates/bug-report.md` into a GitHub issue and fill in the
+  comments.
++ Run `Rscript .../check_environment_setup.R` from your clone before you push.
++ Read `references/worked-example.md` to see a real contribution end to end.
+
+::: {.fragment}
+
+The skills are the procedural companion to
+[the checklist](05-checklist.qmd) — same steps, more detail.
+
+:::
+
+:::
+
+::: {.content-hidden when-format="revealjs"}
+
+## Mentor mode
+
+The skills instruct the agent to be [a mentor, not a contributor]{.hl}, see
+[mentor-model.md]().
+
++ **You always know where you are.** Every code contribution passes through five
+  stages — *orient, set up, change, verify, submit* — then review. Each workflow
+  skill opens with that map and names the stage every time it moves.
+
+  ```
+  Orient    1. Issue read, unclaimed, and understood
+  Set up    2. Fork and clone
+            3. Check the environment
+            4. Create a branch
+  Change    5. Write the code   6. Document, then read your own diff
+  Verify    7. Test   8. Update NEWS.md   9. Run devtools::check()
+  Submit   10. Commit, push, open the pull request
+  ```
+
+  Only the contents differ between R, Python, and C++. The shape does not — so
+  what you learn here transfers to the next repository.
++ **The agents responds should adhere to the same structure:** The stage you 
+  are in, one sentence on why this step is necessary, one command block, and
+  the offer *"Run it, or shall I?"*. Under 100 words, no recap, no preview.
++ **Then it stops and waits.** *An unanswered offer is not permission.* This is
+  the rule that does the work; without it an agent runs to the end alone.
+
+Ask the agent to take a step over and it will, but it says what it did and
+what you must check, then hands the next step back. The one thing it should not
+take over is the understanding: you cannot delegate the review of code that
+goes out in your name.
+
+The full statement is
+[`stan-contributing/references/mentor-mode.md`](https://github.com/florence-bockting/stancon-contributing/blob/main/skills/stan-contributing/references/mentor-mode.md)
+
+
+## Which shell the commands assume {.smaller}
+
+The command blocks in the skills — and in this book — are written for a
+[POSIX shell]{.hl}: Terminal on macOS and Linux, and
+[Git Bash](https://gitforwindows.org/) on Windows. PowerShell and `cmd.exe` do
+not understand `2>/dev/null`, and neither ships `grep` or `head`.
+
+Four commands genuinely differ on Windows, and the skills flag each one where it
+appears:
+
+| Written | On Windows |
+| :-- | :-- |
+| `source .venv/bin/activate` | `.venv\Scripts\Activate.ps1` |
+| `python3` | `python`, or `py -3` |
+| `./runTests.py …` | `python runTests.py …` |
+| `make …` (Stan Math) | `mingw32-make …`, from RTools |
+
+Two toolchains have to be there before you start, on every platform.
+`devtools::check()` compiles the package, so it needs
+[RTools](https://cran.r-project.org/bin/windows/Rtools/) on Windows and the
+Xcode command line tools (`xcode-select --install`) on macOS. Stan Math needs a
+C++ compiler, `make`, Python 3, and `doxygen` — all from RTools on Windows.
+Windows users, note also that the R installer does **not** put `Rscript` on your
+`PATH`.
+
+The skills ask the agent to establish your platform at the set-up stage and then
+give you one command per turn, the one that fits your machine — not three
+variants to choose between.
+
+
+## A note on trusting them
+
+The pull request goes out under your name, and you have to be able to explain
+every line of it. In the stan-dev repositories the
+[AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)
+states this outright; the ArviZ repositories have no equivalent policy, but the
+same expectation holds in practice.
+
+:::

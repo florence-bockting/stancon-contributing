@@ -1,51 +1,49 @@
----
-format:
-  revealjs:
-    output-file: 05-checklist-slides.html
----
-
 # Checklist {#sec-checklist}
-## Contributing to R packages
 
-::: {.callout-note .checklist}
-## Getting started
+The Stan ecosystem does not have one contribution process. The R packages, the
+ArviZ Python packages, and the C++ core each have their own, and they differ in
+ways that will trip you up if you carry habits between them: which branch you
+start from, whether an issue is required, what runs the tests, and who writes
+the changelog. Pick the checklist that matches your target repository, and see
+[the three processes at a glance](#sec-three-processes) for where they diverge.
+
+::: {.callout-note .checklist collapse = "true"}
+
+## Contributing to R packages (click to expand)
+
+### Getting started {.unnumbered}
 
 + Check open issues or open a new one to discuss your proposed change before starting significant work (for bigger changes; typo/doc fixes can skip this)
 + Check the repository for a `CONTRIBUTING.md` with package-specific guidance
-:::
 
-::: {.callout-note .checklist}
-## AI contribution policy
+### AI contribution policy {.unnumbered}
 
 + if you used AI tools (e.g. Claude, ChatGPT, GitHub Copilot) to help write your contribution, review the Stan project's [AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy) before opening a PR
-+ disclose AI assistance in your PR description if the policy requires it
++ posterior, bayesplot, loo, and cmdstanr state in their `CONTRIBUTING.md` that all contributions must follow it, so disclose AI assistance in your PR description
++ other packages (e.g. rstanarm, brms) do not reference it; disclosing there is good practice rather than a requirement
 + you remain responsible for understanding, testing, and being able to explain any AI-generated code you submit
 
-:::
-
-
-::: {.callout-note .checklist}
-## Fork and clone
+### Fork and clone {.unnumbered}
 
 + raw git: fork on GitHub, then
 `git clone https://github.com/your-username/repository-name.git`
 + usethis: `usethis::create_from_github("stan-dev/repository-name", fork = TRUE)`
-:::
 
-::: {.callout-note .checklist}
-## Create a branch for your changes
+### Create a branch for your changes {.unnumbered}
 
 + raw git: start from the main/master branch:
 `git checkout -b fix/123-short-description`
 + usethis: `usethis::pr_init("brief-description-of-change")`
 
-:::
-
-::: {.callout-note .checklist}
-## Make your changes on this branch
+### Make your changes on this branch {.unnumbered}
 
 + keep your branch up to date with upstream
 + install development dependencies `devtools::install_dev_deps()`
++ `devtools::check()` at the end compiles the package, so you need a compiler:
+[RTools](https://cran.r-project.org/bin/windows/Rtools/) on Windows, the Xcode
+command line tools (`xcode-select --install`) on macOS. Check this now, not after
+you have written the change. Windows users: the R installer also leaves
+`Rscript` off your `PATH`
 + debug with `devtools::load_all()` and `debug(new_function)`
 + if you add a new function:
   + add tests and run them with `testthat::test_file()` or
@@ -56,10 +54,7 @@ format:
   + ensure vignette is rendered locally with `devtools::build_vignettes()`
 + ensure you follow the style of the existing code/docs
 
-:::
-
-::: {.callout-note .checklist}
-## Contributing or changing plots (bayesplot in particular)
+### Contributing or changing plots (bayesplot in particular) {.unnumbered}
 
 + bayesplot uses [`vdiffr`](https://vdiffr.r-lib.org/) for visual regression
 testing. In visual regression testing plots are compared against reproducible
@@ -73,20 +68,18 @@ relevant test file
 interactive Shiny app showing old vs. new SVG side by side
 + only accept a snapshot change if the visual difference is the one you
 intended
++ SVG snapshots record text as glyph positions, so they depend on the fonts
+installed on the machine that rendered them. Commit the ones you write, but if
+snapshots you never touched start failing, suspect fonts before you suspect your
+plot
 
-:::
-
-::: {.callout-note .checklist}
-## Update NEWS.md
+### Update NEWS.md {.unnumbered}
 
 + add a bullet for your change, placed just below the first header in NEWS.md
 + follow the existing formatting and tone used in that file (check recent
 entries for the convention)
 
-:::
-
-::: {.callout-note .checklist}
-## Finalize your changes
+### Finalize your changes {.unnumbered}
 
 + Add and commit your changes in reasonable chunks `git add <files>` and
 `git commit -m "short description of your changes"`
@@ -97,13 +90,246 @@ entries for the convention)
   + raw git: `git push origin fix/123-short-description`
   + usethis: `usethis::pr_push()` (opens the PR flow in your browser for you)
 
-:::
+### Open a PR {.unnumbered}
 
-::: {.callout-note .checklist}
-## Open a PR
-
-+ add a detailed description of your changes (see 
++ add a detailed description of your changes (see
 [How to write a good PR description](#sec-contributing-code))
 + expect CI to run additional checks automatically
 
 :::
+
+::: {.callout-note .checklist collapse = "true"}
+
+## Contributing to ArviZ (Python) (click to expand) {#sec-checklist-python}
+
+ArviZ is a metapackage: most contributions go to one of the sub-packages,
+not to `arviz-devs/arviz`. The
+[ArviZ contributing guide](https://python.arviz.org/en/latest/contributing/index.html)
+is the authority; below is the short version.
+
+
+### Getting started {.unnumbered}
+
++ pick the right repository: 
+  + `arviz-base` (how data is *represented*),
+  + `arviz-stats` (computing a *number*), 
+  + `arviz-plots` (*drawing* something)
++ comment on the issue before starting work
++ check the feature does not already exist under another name
++ read the [pull request tutorial](https://python.arviz.org/en/latest/contributing/pr_tutorial.html)
+and the sub-package's own contributing pages under `python.arviz.org/projects/`
+
+### AI assistance (recommended practice) {.unnumbered}
+
++ ArviZ has **no** AI contribution policy
++ disclosing AI assistance in the PR description is still good practice, and
+reviewers appreciate knowing; the
+[AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy)
+is a reasonable model to follow voluntarily
++ either way, you remain responsible for understanding, testing, and being able
+to explain every line you submit
+
+### Fork, clone, and add the upstream remote {.unnumbered}
+
++ `gh repo fork arviz-devs/arviz-stats --clone`
++ `git remote add upstream git@github.com:arviz-devs/arviz-stats.git`
+
+### Set up the environment {.unnumbered}
+
++ `python3 -m venv .venv && source .venv/bin/activate` — on Windows,
+`python -m venv .venv` then `.venv\Scripts\Activate.ps1`
++ `pip install tox` and `pip install -e .`
++ `tox list -m dev` shows the available development tasks
++ `pip install -e ".[test]"` install test dependencies if you want to run `pytest` directly
++ if your change spans repositories, install both editable in dependency order —
+`arviz-plots` declares the other two as *git* dependencies, so a plain
+`pip install -e ./arviz-plots` silently downloads a fresh `arviz-stats` from
+GitHub and ignores your local changes
+
+### Install the pre-commit hooks {.unnumbered}
+
++ `pip install pre-commit pylint && pre-commit install`
++ `pre-commit run --all-files`
++ the hook config includes `no-commit-to-branch --branch main`, so the
+repository will physically refuse a commit on `main`
+
+### Create a branch and make your changes {.unnumbered}
+
++ `git checkout -b <new-branch-name>` (create a new branch and switch to it)
++ Code contribution: place code at the right architectural layer
++ write [numpydoc](https://numpydoc.readthedocs.io/) docstrings
++ for user-facing changes, add inline examples, `See Also` links, and
+`References` if you are implementing a published method
+
+### Add tests {.unnumbered}
+
++ tests are parametrised with `@pytest.mark.parametrize` and use shared fixtures
+
+### Run the tests and checks {.unnumbered}
+
++ `tox -e full` runs the tests
++ `tox -e check` runs style and lint
++ in `arviz-stats` the test environments are split by dependency set:
+  + `tox -e full`, 
+  + `tox -e minimal`, 
+  + `tox -e xarray`, 
+  + `tox -e nightlies` etc.
+  + `tox list` shows them all
++ **a missing dependency skips a test, it does not fail it**
+  + Run `pytest tests/test_metrics.py -q -rs` to see the module that failed to import
++ trust `tox -e full`: it sets `ARVIZ_REQUIRE_ALL_DEPS=TRUE`, which turns
+skips into errors, so a failure there is a real failure. 
++ to debug, put a `breakpoint()` in the function and run the test with
+`pytest tests/test_metrics.py --pdb` (the R equivalent is `debug()`)
+
+### Rebase, push, and open a PR {.unnumbered}
+
++ `git fetch upstream && git rebase upstream/main`
++ `git push -u origin add-brier-score`
++ mark the PR `[WIP]` if it is not finished
++ **do not edit `CHANGELOG.md`** — it is generated at release time from merged
+PR titles
+
+:::
+
+
+::: {.callout-note .checklist collapse = "true"}
+
+## Contributing to the Stan Math library (C++) (click to expand) {#sec-checklist-math}
+
+The [developer process overview](https://github.com/stan-dev/stan/wiki/Developer-process-overview)
+and the [Math contributor help pages](https://github.com/stan-dev/math/tree/develop/doxygen/contributor_help_pages)
+are the authorities for this contribution workflow.
+
+Branches come off `develop`, **not** `main` or `master`; every pull request must
+correspond to an issue; and branch names are prescribed.
+
+::: {.callout-important}
+
+This checklist is not yest tested and is work in progress.
+
+:::
+
+### Getting started {.unnumbered}
+
++ open an issue first — issues are reserved for bugs and feature requests
+"defined well enough for a developer to tackle", and vague ones get closed and
+moved to the forums
++ prefer several small issues over one large one
++ general questions go to the
+[Developers tag on Discourse](https://discourse.mc-stan.org/c/stan-dev), not the
+issue tracker
++ for a new distribution, get it working as a user-defined function in the Stan
+language and post it on Discourse *before* writing any C++
++ read [`.github/CONTRIBUTING.md`](https://github.com/stan-dev/math/blob/develop/.github/CONTRIBUTING.md)
+and the [coding style and idioms](https://github.com/stan-dev/stan/wiki/Coding-Style-and-Idioms)
+
+### AI contribution policy {.unnumbered}
+
++ all contributions to Math must follow the
+[AI Contribution Policy](https://github.com/stan-dev/stan/wiki/AI-Contribution-Policy);
+this is stated in the repository's own contributing guide
+
+### Fork, clone, and configure git {.unnumbered}
+
++ `gh repo fork stan-dev/math --clone`
++ `git remote add upstream https://github.com/stan-dev/math.git`
++ `git config push.default simple` and `git config merge.ff false`
++ install the pre-push hooks shipped in `hooks/`, which block direct pushes to
+`master` and `develop`
+
+### Create a branch from `develop` {.unnumbered}
+
++ `git checkout develop && git pull upstream develop`
++ features: `git checkout -b feature/issue-1234-short-description`
++ bug fixes: `bugfix/issue-1234-short-description`, off the latest hotfix
++ `develop` is the integration branch and must always be releasable; `master`
+holds tagged releases only
+
+### Write the function {.unnumbered}
+
++ a new function starts as one generic implementation in `prim/fun`, written so
+it accepts `double`, reverse-mode `var`, and forward-mode `fvar` scalars
++ add specializations in `rev`, `fwd`, `mix`, or `opencl` only when there is a
+reason, such as an analytic gradient that beats the autodiff one
++ every function outside the `internal` namespace must support higher-order
+autodiff
++ use the library's patterns: `require_*` type traits to constrain templates,
+`to_ref()` before coefficient access on Eigen expressions, `value_type_t` rather
+than hard-coded `double`, and `.coeff()`/`.coeffRef()` for unchecked access
++ document with doxygen — `make doxygen` must produce **zero** warnings
+
+### Add tests {.unnumbered}
+
++ **bug fix**: at least one test that fails before the patch and passes after —
+write and commit that test *first*
++ **new feature**: at least one test showing expected behaviour *and* one showing
+behaviour on error; expect the reviewer to ask for more
++ new functions are verified with the `expect_ad()` framework, which checks
+values and derivatives up to third order against finite differences, over every
+combination of primitive and autodiff argument types
++ tests go in `test/unit/math/mix/fun/<name>_test.cpp`
++ loosening a tolerance to make a test pass is a red flag — it usually means the
+derivative is wrong
+
+### Run the required checks {.unnumbered}
+
+All five must pass before you open the pull request:
+
++ `./runTests.py test/unit` — unit tests
++ `make test-headers` — every header compiles standalone
++ `make test-math-dependencies` — no forbidden cross-folder includes
++ `make doxygen` — documentation builds, 0 warnings
++ `make cpplint` — style, 0 new errors
+
+While iterating, run only what you touched
+(`./runTests.py test/unit/math/prim/fun/foo_test.cpp`) and the full suite once
+before pushing. For a debug build, add `DEBUG = 1` to `make/local`.
+
+::: {.callout-warning}
+These are the paths in `stan-dev/math`. In `stan-dev/stan` the tests live under
+`src/`, so it is `./runTests.py src/test/unit`.
+:::
+
+::: {.callout-note}
+## On Windows
+
+Two of the five commands are spelled differently. The runner is
+`python runTests.py test/unit` — the `./` form relies on a shebang, which Windows
+does not read. `make` is `mingw32-make`, from
+[RTools](https://cran.r-project.org/bin/windows/Rtools/), which also supplies the
+compiler and `doxygen`. Check that you have all of this *before* you write the
+C++, not when you reach this step.
+:::
+
+### Open a PR {.unnumbered}
+
++ base repository `stan-dev/math`, **base branch `develop`**
++ the template asks for Summary, Tests, Side effects, Release notes, and a
+checklist
++ **name the copyright holder** — yourself, or your university or employer;
+submitting agrees to license the code under BSD 3-clause and the documentation
+under CC-BY 4.0
++ write the **release note** for a user: it goes into the release notes
++ fix review feedback on the same branch; do not open a replacement PR
++ anyone who reads C++ fluently can review, so reviewing is itself a good way to
+contribute
+
+:::
+
+## The three processes at a glance {#sec-three-processes}
+
+| | R (e.g. `posterior`) | Python (`arviz-stats`) | C++ (`math`) |
+| :-- | :-- | :-- | :-- |
+| Base branch | `main` / `master` | `main` | **`develop`** |
+| Issue required | recommended | claim it by comment | **yes, one per PR** |
+| Branch name | free | free | **`feature/issue-<n>-desc`** |
+| Environment | `devtools::install_dev_deps()` | `tox` + editable install | `make`, no environment manager |
+| Pinned tooling | roxygen2 version in `DESCRIPTION` | ruff/pylint hashes in pre-commit | compiler and `lib/` versions |
+| Documentation | roxygen2 → `man/*.Rd` | numpydoc → `.pyi` stubs | doxygen, 0 warnings |
+| Tests | `testthat` (+ `vdiffr`) | `pytest`, parametrised | `expect_ad()` vs finite differences |
+| Run tests | `devtools::test()` | `tox -e full` | `./runTests.py test/unit` |
+| Full check | `devtools::check()` | `tox -e check` | five separate `make` targets |
+| Style | conventional, reviewed by humans | enforced by pre-commit | `make cpplint`, 0 new errors |
+| Changelog | edit `NEWS.md` yourself | **generated from your PR title** | "Release notes" field in the PR |
+| Licensing step | — | — | **name the copyright holder** |

@@ -8,6 +8,9 @@ book:
   author: "Florence Bockting"
   date: today
   downloads: [pdf]
+  repo-url: https://github.com/florence-bockting/stancon-contributing
+  repo-branch: main
+  repo-actions: [source, issue]
   chapters:
     - index.qmd
     - 01-what-is-stan.qmd
@@ -15,6 +18,9 @@ book:
     - 03-how-to-contribute.qmd
     - 04-find-information.qmd
     - 05-checklist.qmd
+    - 06-skills.qmd
+    - 07-walkthrough-R.qmd
+    - 08-walkthrough-Py.qmd
 
 format:
   html:

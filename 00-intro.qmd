@@ -77,4 +77,5 @@ Of course you can also...
 2. The Stan ecosystem
 3. How to contribute to Stan?
 4. Where to find information?
-5. Open Discussion/Question Round
+5. Stan Skills
+6. Open Discussion/Question Round

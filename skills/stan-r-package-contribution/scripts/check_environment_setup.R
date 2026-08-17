@@ -84,7 +84,7 @@ pin_field <- intersect(c("Config/roxygen2/version", "RoxygenNote"), colnames(des
 if (!length(pin_field)) {
   say("WARN", "DESCRIPTION pins no roxygen2 version; skipping version check.")
 } else {
-  pinned <- trimws(desc[1, pin_field[1]])
+  pinned <- unname(trimws(desc[1, pin_field[1]]))
   installed <- tryCatch(
     as.character(utils::packageVersion("roxygen2")),
     error = function(e) NA_character_

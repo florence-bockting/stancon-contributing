@@ -502,6 +502,7 @@ Run it, or shall I?
 ............................................                                                            [100%]
 44 passed in 3.80s
 :::
+:::
 
 ::: {.callout-note collapse = "true"}
 ## Add-on: Debugging (click to expand)
@@ -793,4 +794,5 @@ By submitting this pull request, the copyright holder agrees to license the
 submitted work under the repository's license, Apache License 2.0.
 ```
 
+:::
 :::

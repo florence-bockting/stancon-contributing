@@ -67,12 +67,13 @@ Point the AI assistant at the skill and make sure it actually reads it.
 ::: {.turn .you}
 [You]{.speaker}
 ```
-I want to create an issue in posterior for the following problematic case:
+I want to create an issue in stan-dev/posterior for the following problematic case:
 
 example_draws() |>
    summarise_draws(char_fun = \(x) "word", mean)
 
 Problem: all columns are converted to string even those that should be a double (e.g., mean).
+Help me write the Issue according to Stan conventions.
 ```
 :::
 :::
@@ -86,29 +87,25 @@ duplicate.
 ::: {.chat}
 ::: {.turn .ai}
 [Claude Opus]{.speaker}
-I read `skills/stan-issue-and-pr/SKILL.md` and its bug-report template. Step one
-there is a duplicate search. Your case is already reported.
+Before drafting: I searched for duplicates first, and this exact case is already reported.
 
-[stan-dev/posterior#355](https://github.com/stan-dev/posterior/issues/355) — "In
-summarise draws, a function that returns a character changes all columns to
-character". Open since 2024-03-14, labelled `bug`, 13 comments. It uses your
-exact example:
+stan-dev/posterior#355 — "In summarise draws, a function that returns a character changes all columns to character", open since 2024-03-14, opened by n-kall, labelled bug. Its reproducible example is character-for-character your code:
 
 ```r
 example_draws() |>
    summarise_draws(char_fun = \(x) "word", mean)
 ```
 
-It also proposes a fix: `type.convert(out, as.is = TRUE)` on the output tibble
-in `summarise_draws_helper`.
+The discussion there already diagnosed the cause: summarise_draws_helper binds results into a matrix and uses unlist, so a single character return coerces every column. Maintainers (mjskay, paul-buerkner) agreed the fix is to bind into a data frame directly rather than round-trip through a string.
 
-So a new issue would be a duplicate. Two options instead:
+There is also an open PR: #356 by n-kall, "modify summarise_draws internals not to coerce values to same type". It is stalled — last update 2025-03-03, using purrr::flatten, with a known failing test for functions returning an unnamed list or vector.
 
-- I read the 13 comments and tell you where the discussion landed.
-- You add a comment to #355 if you have something new — a different failure
-  mode, or a reason the proposed fix does not work.
+So a new issue would be a duplicate, and Stan maintainers close those. Two more useful paths:
 
-Which would you like? Also: were you planning to fix this, or only to report it?
++ Comment on #355 if you have something new — a case the existing report misses, or evidence it still reproduces on 1.7.0.
++ Pick up #356. It is unfinished, the maintainers want it, and the remaining problem is well-defined.
+
+Which do you want to do? If it's the PR, I can help you draft the description with the stan-r-package-contribution workflow. If you think your case actually differs from #355, tell me how and we'll write the issue.
 :::
 :::
 
@@ -121,14 +118,7 @@ To see the rest of the workflow, we tell the LLM to skip the first step
 ::: {.turn .you}
 [You]{.speaker}
 ```
-I want to create an issue in posterior for the following problematic case:
-
-example_draws() |>
-   summarise_draws(char_fun = \(x) "word", mean)
-
-Problem: all columns are converted to string even those that should be a double (e.g., mean).
-
-This is a demo. Don't check for existing Issues.
+Skip this step and help me draft an issue anyway as this is a demo.
 ```
 :::
 :::
@@ -141,93 +131,39 @@ every decision that is made.
 ::: {.chat}
 ::: {.turn .ai}
 [Claude]{.speaker}
-Read `stan-issue-and-pr`. This repo ships no issue template, so we use the
-skill's bug-report template. We are at the submit stage — this becomes public in
-your name, so [you write the words and post it]{.hl}.
+Draft is at issue-draft.md.
 
-I will ask the template questions one at a time and write down your answers.
+Three things are still yours to write. I left them marked rather than guessed:
 
-**First: what did you expect?** You passed `char_fun = \(x) "word"` and `mean`.
-What should the returned `draws_summary` have looked like — which columns, which
-types?
-:::
++ "What I expected" — I put a suggestion there. Rewrite it. Reviewers ask about text a contributor did not write.
++ Additional context — did you hit this in real work or while reading code? Do you have a workaround?
++ AI disclosure — the Stan AI Contribution Policy requires it in stan-dev repos, and you are literally on a branch adding that policy to CONTRIBUTING.md. Suggested wording is in the draft.
 
-::: {.turn .you}
-[You]{.speaker}
-The mean should have been a numeric.
-:::
+Also swap my environment block for your own sessionInfo().
 
-::: {.turn .ai .fragment}
-[Claude]{.speaker}
-**Next: actual output.** The issue needs the real printout as text, not a
-description of it. Can you paste what R printed for that call?
-
-If you'd rather, I can run it here and show you the output — you check it, then
-it goes in the issue.
-:::
-
-::: {.turn .you}
-[You]{.speaker}
-Run it yourself.
-:::
-
-::: {.turn .ai}
-[Claude]{.speaker}
-Confirmed. mean comes back as <chr>, values stringified:
-
-```
-# A tibble: 10 × 3
-   variable char_fun mean            
-   <chr>    <chr>    <chr>           
- 1 mu       word     4.1799990610081 
- 2 tau      word     4.16356885610418
-...
-   variable    char_fun        mean 
-"character" "character" "character"
-```
-
-**Environment:** which `posterior` version did you hit this on — installed
-1.7.0, or your local checkout?
-:::
-
-::: {.turn .you}
-[You]{.speaker}
-The version from my local checkout.
-:::
-
-::: {.turn .ai .fragment}
-[Claude]{.speaker}
-Two sections left: **Additional context** and **Open questions**.
-
-Do you want me to trace where the coercion happens in `R/` and add it as a
-pointer?
-:::
-
-::: {.turn .you}
-[You]{.speaker}
-Yes, trace it back.
-No further open questions.
-:::
-
-::: {.turn .ai}
-[Claude]{.speaker}
-Draft written to `issue-draft.md`:
 :::
 :::
 
 ::: {.artifact}
 [▤ issue-draft.md]{.filename}
 ````markdown
+# Title (suggestion — rewrite in your words)
+
+summarise_draws() coerces all summary columns to character when one summary function returns a character
+
 ## What happened
 
-`summarise_draws()` returned every summary column as character when one of the
-supplied functions returned a string. `mean` came back as `<chr>` with
-stringified values.
+`summarise_draws()` returns every summary column as `<chr>` if any one summary
+function returns a character value. Numeric summaries such as `mean` become
+strings.
 
 ## What I expected
 
-`mean` stays numeric (double). Only the column produced by the
-character-returning function should be character.
+<!-- SUGGESTION — this is your sentence to write. Mine below as a starting point. -->
+
+Each summary column keeps its own type. `char_fun` is a character column and
+`mean` stays a double. Only the column produced by the character-returning
+function should be character.
 
 ## Minimal reproducible example
 
@@ -254,41 +190,49 @@ example_draws() |>
  8 theta[6] word     3.98696993634695
  9 theta[7] word     6.5030995214442
 10 theta[8] word     4.56520199862817
+```
 
-> sapply(x, class)
-   variable    char_fun        mean
-"character" "character" "character"
+`str()` confirms the storage type, so this is not only a print-method effect:
+
+```
+drws_smm [10 × 3] (S3: draws_summary/tbl_df/tbl/data.frame)
+ $ variable: chr [1:10] "mu" "tau" "theta[1]" "theta[2]" ...
+ $ char_fun: chr [1:10] "word" "word" "word" "word" ...
+ $ mean    : chr [1:10] "4.1799990610081" "4.16356885610418" ...
 ```
 
 ## Steps to reproduce
 
 1. `library(posterior)`
-2. Run `example_draws() |> summarise_draws(char_fun = \(x) "word", mean)`
-3. Check the column types, e.g. with `sapply(x, class)`
+2. Run the example above.
+3. Inspect the column types with `str()` or the tibble header.
 
 ## Environment
 
-- OS: Ubuntu 24.04.4 LTS
-- Package version: posterior 1.7.0 (local checkout at commit 4ec8b00)
+- OS: Linux, x86_64-pc-linux-gnu
+- Package version: posterior 1.7.0 (installed release)
 - R version: 4.6.1 (2026-06-24)
+
+<!-- Replace with your own sessionInfo() output before posting. -->
 
 ## Additional context
 
-The summary is accumulated in a single matrix rather than per column, in
-`summarise_draws_helper()`:
+<!-- OPEN — only you can fill these in:
+     - Did you hit this in real work, or while reading the code?
+     - Do you have a workaround you are using?
+-->
 
-- `R/summarise_draws.R:360` — `out <- matrix(NA, ...)` holds the columns of
-  every summary function
-- `R/summarise_draws.R:362` and `R/summarise_draws.R:367` — `unlist()` on a list
-  mixing a character with doubles yields a character vector, and assigning it
-  coerces the whole matrix
-- `R/summarise_draws.R:370` — `as_tibble()` then sees character throughout
+Possible cause, from reading `R/summarise_draws.R`: `summarise_draws_helper()`
+pre-allocates a matrix at line 360 and fills it with `unlist()` at lines 362 and
+367. A matrix holds one type, and `unlist()` on a mixed-type list coerces to
+character. Binding the per-variable results into a data frame instead of a
+matrix would avoid the round trip through character.
 
-A matrix holds one type, so a single character-returning function converts all
-columns.
+<!-- AI DISCLOSURE — required by the Stan AI Contribution Policy if it applies.
+     Delete if you used no assistant. Suggested wording:
+     "I used Claude Code to reproduce the example and locate the relevant code
+     in summarise_draws.R. The report is in my own words." -->
 
-An AI assistant helped me reproduce this and locate the code path. I checked the
-output and the code references myself.
 ````
 :::
 
@@ -311,31 +255,39 @@ How do I get started?
 
 ::: {.turn .ai}
 [Claude]{.speaker}
-I read the skills in skills/ — stan-contributing and stan-r-package-contribution govern what follows.
+Here is the whole path. It is your checklist, not mine.
+
+```
+Orient    1. Issue read, unclaimed, and understood   ← you are here
+Set up    2. Fork and clone
+          3. Check the environment: roxygen2 pin, dev packages, clean tree
+          4. Create a branch
+Change    5. Write the code next to its siblings
+          6. Document, then read your own diff
+Verify    7. Test the failure modes, then the full suite
+          8. Update NEWS.md
+          9. Run devtools::check()
+Submit   10. Commit, push, open the pull request
+Review       Respond to reviewers
+```
 
 **Stage: orient — step 1, confirm the issue is unclaimed.**
 
-Your checklist:
-```
-Orient    1. Issue read, unclaimed, understood
-Set up    2. Fork and clone   3. Preflight   4. Branch
-Change    5. Write code       6. Document
-Verify    7. Test  8. NEWS.md  9. devtools::check()
-Submit   10. Commit, push, pull request
-Stage: orient — step 1, confirm the issue is unclaimed.
-```
-Two things from the read-only lookups you should see:
+Before any code, ask in the issue. Suggested comment — rewrite it in your words:
 
-#355 already has an open PR, #356 by n-kall, last updated 2025-03-03. Claimed, but 17 months quiet.
-The thread rejected the issue author's own proposal. paul-buerkner and mjskay agreed on binding results into a data frame directly, instead of a matrix or type.convert(). Also unlist() flattens types — purrr::flatten was floated, with the requirement that posterior not depend on purrr.
-So the work here is not "apply type.convert()". Building that is the common way a good PR gets sent back.
+```
+Is #356 still active? If not, I would like to pick this up. I plan to follow the data-frame binding approach mjskay suggested rather than purrr::flatten, to avoid the new dependency and the unnamed-vector case that PR hit.
+```
 
-Before any code, ask in the issue whether the PR is stale. Draft:
-```
-Hi! Is this still being worked on? #356 hasn't moved since March 2025. 
-Happy to pick it up — should I build on that branch or start fresh?
-```
-Post it yourself, or shall I?
+Post that yourself, or shall I with gh?
+
+While you wait, two questions decide the design. The thread contains a disagreement nobody resolved:
+
++ purrr::flatten (n-kall's PR) or direct data-frame binding (mjskay, and paul-buerkner agreed)?
++ PR #356 has a failing test for functions returning an unnamed list or vector. What should summarise_draws() do in that case?
+
+Can you describe, in your own words, why the current code coerces the columns? If not, we read R/summarise_draws.R:340-375 together before step 2.
+
 :::
 
 ::: {.turn .you}
@@ -346,6 +298,8 @@ Skip this step and start with fresh local PR
 ## Check setup
 
 First, we ensure that we have a fork and clone of the repo of interest.
+There are different approaches for doing this, below are two different approaches
+using either `usethis` or `gh`.
 
 ```
 # from R
@@ -354,6 +308,7 @@ usethis::create_from_github("stan-dev/posterior", fork = TRUE)
 # from the shell, clones into ./posterior
 gh repo fork stan-dev/posterior --clone
 ```
+(In my case the LLM will notice that I have a clone of the package and push rights.)
 
 Then, we check whether the environment is set up as expected. 
 For this, the skills ship an R script,
@@ -363,13 +318,19 @@ automatic checks.
 ::: {.chat}
 ::: {.turn .ai}
 [Claude]{.speaker}
-**Stage: set up — step 3, check the environment setup.**
+Two facts change the plan, both read-only:
 
-This script reads DESCRIPTION, your R library, and your git state. It answers one question: can this machine make a clean pull request? The main check is the roxygen2 pin — a mismatch turns your 4-file change into a 47-file diff at step 6. It changes nothing. It prints one OK/WARN/FAIL line per check.
+You have push access to stan-dev/posterior ("push": true), so no fork is needed. Step 2 genuinely does not apply to you.
+Working tree is clean.
 
+**Stage: set up — step 3, check the environment.**
+
+This script reads your DESCRIPTION, your R library, and your git state. The check that matters is roxygen2: if your version differs from the one that documented this package, devtools::document() at step 6 turns a 4-file change into a 47-file diff of reformatted `\link{}` calls, and a reviewer cannot find your actual change in that. It changes nothing — it reads and prints one line per check.
+
+```bash
+Rscript /u/21/wa.bocktif1/unix/.claude/skills/stan-r-package-contribution/scripts/check_environment_setup.R
 ```
-Rscript skills/stan-r-package-contribution/scripts/check_environment_setup.R
-```
+It will flag your current branch, add-ai-contribution-policy. That flag is correct — we cut the new branch from master in the next step, not from your policy work.
 
 Run it, or shall I? Paste what it prints.
 :::
@@ -377,24 +338,21 @@ Run it, or shall I? Paste what it prints.
 ::: {.turn .you}
 [You]{.speaker}
 
-```bash
-Rscript skills/stan-r-package-contribution/scripts/check_environment_setup.R
-```
+*Copy & paste terminal output to LLM*
 
-```
+```bash
+user@posterior$ Rscript /u/21/wa.bocktif1/unix/.claude/skills/stan-r-package-contribution/scripts/check_environment_setup.R
+
 Environment check for an R package contribution.
 Reads DESCRIPTION, your R library, and your git state. Changes nothing.
 FAIL blocks a reviewable pull request. WARN is worth a look.
 
 [OK  ] Package: posterior
 [OK  ] Contributing guide: .github/CONTRIBUTING.md -- read it before you start.
-[FAIL] roxygen2 mismatch: installed 8.0.0, DESCRIPTION pins 7.3.3.
-       Documenting now would rewrite every file in man/.
-       remotes::install_version("roxygen2", version = "7.3.3")
+[OK  ] roxygen2 7.3.3 matches the pin in DESCRIPTION.
 [OK  ] devtools installed.
 [OK  ] usethis installed.
 [OK  ] testthat installed.
-[OK  ] vdiffr installed (this package uses snapshot tests).
 [OK  ] Working tree clean.
        Branch 'add-ai-contribution-policy' is not a base branch.
        Did you create it for this contribution? [y/N] N
@@ -408,7 +366,58 @@ FAIL blocks a reviewable pull request. WARN is worth a look.
 Fix every FAIL above before you start the change.
 ```
 :::
+
+::: {.turn .ai}
+[Claude]{.speaker}
+
+**Stage: set up — step 3, the FAIL on the branch.**
+
+```
+Orient    1. Issue read, unclaimed, and understood
+Set up    2. Fork and clone
+          3. Check the environment  ← you are here
+          4. Create a branch
+Change    5. Write the code
+          6. Document, then read your own diff
+Verify    7. Test
+          8. Update NEWS.md
+          9. devtools::check()
+Submit   10. Commit, push, open the pull request
+```
+
+The FAIL is correct. git log master..HEAD prints nothing, so add-ai-contribution-policy is already merged into master. New work here starts from a finished change.
+
+This returns you to master and pulls the latest upstream commits, so your branch starts from current code:
+
+```r
+usethis::pr_pause()
+```
+
+Run it, or shall I?
 :::
+
+::: {.turn .you}
+[You]{.speaker}
+Done.
+:::
+
+::: {.turn .ai}
+[Claude]{.speaker}
+
+**Stage: set up — step 4, create a branch.**
+
+pr_init() pulls the latest upstream commits, creates the branch, and switches to it in one call. You are on master, so it starts from current code.
+
+```r
+usethis::pr_init("355-summarise-draws-types")
+```
+The name appears in the pull request, so change the words if you prefer others.
+
+Run it, or shall I?
+:::
+:::
+
+Run the command and then we are on the respective development branch and can make our changes.
 
 ::: {.callout-note}
 ## If `Rscript` is not found
@@ -519,6 +528,8 @@ summarise_draws_helper <- function(x, funs, .args) {
 Finally, we run the tests to check whether our code changes make them pass.
 
 ```bash
+devtools::load_all()
+
 testthat::test_file("tests/testthat/test-summarise_draws.R")
 ```
 
@@ -540,10 +551,10 @@ Changes are made. Is this branch PR ready?
 
 What is missing:
 
-Nothing is committed. git log master..HEAD is empty. Both files are still working-tree changes only.
-No NEWS.md entry (step 8). The file starts at # posterior 1.7.1, so you need a new # posterior (development version) header with a ### Bug Fixes bullet citing (#355).
-devtools::check() has not been run (step 9).
-No fork remote. origin is stan-dev/posterior itself. If you have push rights that is fine; otherwise usethis::pr_push() will fail.
++ Nothing is committed. git log master..HEAD is empty. Both files are still working-tree changes only.
++ No NEWS.md entry (step 8). The file starts at # posterior 1.7.1, so you need a new # posterior (development version) header with a ### Bug Fixes bullet citing (#355).
++ devtools::check() has not been run (step 9).
++ No fork remote. origin is stan-dev/posterior itself. If you have push rights that is fine; otherwise usethis::pr_push() will fail.
 
 Next step is NEWS.md. The skill is firm that you write this one — it is the only text users read under the package name.
 
@@ -595,102 +606,10 @@ Run it, or shall I? Paste the summary lines it ends with.
 ::: {.turn .you}
 [You]{.speaker}
 
-*Run `check()` command.* 
+*Run `check()` command and paste output.*
 
-```
-── R CMD check ─────────────────────────────────────────────────────────────────────────────────────────────
-─  using log directory ‘/tmp/RtmpcegVNv/filefd6f13521fdce/posterior.Rcheck’
-─  using R version 4.6.1 (2026-06-24)
-─  using platform: x86_64-pc-linux-gnu
-─  R was compiled by
-       gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-       GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-─  running under: Ubuntu 24.04.4 LTS
-─  using session charset: UTF-8
-─  current time: 2026-08-16 04:09:51 UTC
-─  using options ‘--no-manual --as-cran’
-✔  checking for file ‘posterior/DESCRIPTION’ ...
-─  this is package ‘posterior’ version ‘1.7.1’
-─  package encoding: UTF-8
-✔  checking package namespace information ...
-─  checking package dependencies ... INFO (5.1s)
-   Packages suggested but not available for checking:
-     'caret', 'gbm', 'randomForest', 'e1071'
-✔  checking if this is a source package ...
-✔  checking if there is a namespace
-✔  checking for executable files (381ms)
-✔  checking for hidden files and directories ...
-✔  checking for portable file names ...
-✔  checking for sufficient/correct file permissions ...
-✔  checking serialization versions ...
-✔  checking whether package ‘posterior’ can be installed (3.4s)
-✔  checking installed package size ...
-✔  checking package directory
-✔  checking for future file timestamps (395ms)
-✔  checking ‘build’ directory ...
-✔  checking DESCRIPTION meta-information (406ms)
-N  checking top-level files
-   Non-standard file/directory found at top level:
-     ‘skills’
-✔  checking for left-over files
-✔  checking index information ...
-✔  checking package subdirectories (730ms)
-✔  checking code files for non-ASCII characters ...
-✔  checking R files for syntax errors ...
-✔  checking whether the package can be loaded ...
-✔  checking whether the package can be loaded with stated dependencies ...
-✔  checking whether the package can be unloaded cleanly ...
-✔  checking whether the namespace can be loaded with stated dependencies (338ms)
-✔  checking whether the namespace can be unloaded cleanly (373ms)
-✔  checking loading without being on the library search path (365ms)
-✔  checking whether startup messages can be suppressed (692ms)
-✔  checking dependencies in R code (495ms)
-✔  checking S3 generic/method consistency (530ms)
-✔  checking replacement functions ...
-✔  checking foreign function calls (494ms)
-✔  checking R code for possible problems (7.1s)
-✔  checking Rd files (592ms)
-✔  checking Rd metadata ...
-✔  checking Rd line widths ...
-✔  checking Rd cross-references (450ms)
-✔  checking for missing documentation entries (382ms)
-✔  checking for code/documentation mismatches (1.2s)
-✔  checking Rd \usage sections (876ms)
-✔  checking Rd contents ...
-✔  checking for unstated dependencies in examples ...
-✔  checking R/sysdata.rda ...
-✔  checking installed files from ‘inst/doc’ ...
-✔  checking files in ‘vignettes’ ...
-✔  checking examples (7.1s)
-✔  checking examples with --run-donttest (6.4s)
-✔  checking for unstated dependencies in ‘tests’ ...
-─  checking tests ...
-✔  Running ‘testthat.R’ (8s)
-✔  checking for unstated dependencies in vignettes (452ms)
-✔  checking package vignettes (934ms)
-✔  checking re-building of vignette outputs (5.7s)
-✔  checking for non-standard things in the check directory ...
-✔  checking for detritus in the temp directory
-   
-   See
-     ‘/tmp/RtmpcegVNv/filefd6f13521fdce/posterior.Rcheck/00check.log’
-   for details.
-   
-── R CMD check results ──────────────────────────────────────────────────────────────── posterior 1.7.1 ────
-Duration: 57.4s
-
-❯ checking top-level files ... NOTE
-  Non-standard file/directory found at top level:
-    ‘skills’
-
-0 errors ✔ | 0 warnings ✔ | 1 note ✖
-```
 :::
 :::
-
-Everything is fine. The only complaint is that the `skills` folder is flagged as
-a non-standard directory. Adding the line `^skills$` to `.Rbuildignore` makes
-this *note* disappear.
 
 #### Add, commit, and push your changes (open your PR)
 Next, add, commit, and push the changes with git.

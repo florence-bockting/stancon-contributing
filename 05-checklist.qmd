@@ -140,26 +140,32 @@ to explain every line you submit
 `python -m venv .venv` then `.venv\Scripts\Activate.ps1`
 + `pip install tox` and `pip install -e .`
 + `tox list -m dev` shows the available development tasks
-+ `pip install -e ".[test]"` install test dependencies if you want to run `pytest` directly
-+ if your change spans repositories, install both editable in dependency order —
-`arviz-plots` declares the other two as *git* dependencies, so a plain
-`pip install -e ./arviz-plots` silently downloads a fresh `arviz-stats` from
-GitHub and ignores your local changes
++ if your change spans repositories, install `arviz-plots` first, then
+use `pip install -e . --no-deps` in the affected repositories.
+Dependencies between ArviZ repositories are defined as *git* dependencies,
+so a plain pip install silently downloads and install the downstream ones from
+GitHub.
 
 ### Install the pre-commit hooks {.unnumbered}
 
-+ `pip install pre-commit pylint && pre-commit install`
-+ `pre-commit run --all-files`
++ `pip install pre-commit && pre-commit install`
 + the hook config includes `no-commit-to-branch --branch main`, so the
 repository will physically refuse a commit on `main`
+* pre-commit is executed within `tox -e check` along with a couple extra checks,
+but having it installed will make it run automatically when commiting.
+This prevents many common minor issues. For example, linting or formatting are
+caught early instead of having you wait for CI to run and fail.
 
 ### Create a branch and make your changes {.unnumbered}
 
 + `git checkout -b <new-branch-name>` (create a new branch and switch to it)
 + Code contribution: place code at the right architectural layer
-+ write [numpydoc](https://numpydoc.readthedocs.io/) docstrings
++ write [numpydoc](https://numpydoc.readthedocs.io/) docstrings,
+pay special attention to the type information as it is automatically parsed into
+type hints by [docstub](https://docstub.readthedocs.io/stable/typing_syntax.html)
 + for user-facing changes, add inline examples, `See Also` links, and
 `References` if you are implementing a published method
++ for new features or API modifying changes also consider updating or tutorial pages
 
 ### Add tests {.unnumbered}
 
@@ -167,20 +173,17 @@ repository will physically refuse a commit on `main`
 
 ### Run the tests and checks {.unnumbered}
 
-+ `tox -e full` runs the tests
 + `tox -e check` runs style and lint
-+ in `arviz-stats` the test environments are split by dependency set:
-  + `tox -e full`, 
-  + `tox -e minimal`, 
-  + `tox -e xarray`, 
-  + `tox -e nightlies` etc.
-  + `tox list` shows them all
-+ **a missing dependency skips a test, it does not fail it**
-  + Run `pytest tests/test_metrics.py -q -rs` to see the module that failed to import
-+ trust `tox -e full`: it sets `ARVIZ_REQUIRE_ALL_DEPS=TRUE`, which turns
-skips into errors, so a failure there is a real failure. 
++ test environments are split by dependency set. Most common testing tasks are:
+  + `tox -e test` (arviz-base and arviz-plots)
+  + `tox -e full` (arviz-stats)
+  + `tox list -m dev` shows them all
 + to debug, put a `breakpoint()` in the function and run the test with
-`pytest tests/test_metrics.py --pdb` (the R equivalent is `debug()`)
+`tox -e full -- tests/test_metrics.py --pdb` (the R equivalent is `debug()`)
+
+### Check the documentation build locally
+
++ First `tox -e docs` then `tox -e viewdocs`, see the [contributing guide](https://python.arviz.org/en/stable/contributing/sphinx_doc_build.html) for more details
 
 ### Rebase, push, and open a PR {.unnumbered}
 
@@ -326,7 +329,7 @@ contribute
 | Branch name | free | free | **`feature/issue-<n>-desc`** |
 | Environment | `devtools::install_dev_deps()` | `tox` + editable install | `make`, no environment manager |
 | Pinned tooling | roxygen2 version in `DESCRIPTION` | ruff/pylint hashes in pre-commit | compiler and `lib/` versions |
-| Documentation | roxygen2 → `man/*.Rd` | numpydoc → `.pyi` stubs | doxygen, 0 warnings |
+| Documentation | roxygen2 → `man/*.Rd` | sphinx, 0 warnings + auto type hints from docs | doxygen, 0 warnings |
 | Tests | `testthat` (+ `vdiffr`) | `pytest`, parametrised | `expect_ad()` vs finite differences |
 | Run tests | `devtools::test()` | `tox -e full` | `./runTests.py test/unit` |
 | Full check | `devtools::check()` | `tox -e check` | five separate `make` targets |

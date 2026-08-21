@@ -260,10 +260,10 @@ The editable install makes import arviz_stats read the file you edit, not a copy
 python3 -m venv .venv
 source .venv/bin/activate
 pip install tox
-pip install -e ".[test]"
+pip install -e .
 ```
 
-arviz-stats needs only numpy and scipy, so this is quick. The [test] extra adds pytest and the fixtures; without it the test files do not import.
+arviz-stats needs only numpy and scipy, so this is quick.
 
 Run it, or shall I?
 
@@ -319,7 +319,7 @@ That path is your clone, so edits take effect immediately.
 ArviZ enforces style with ruff and pylint at commit time. The hooks fix formatting on your machine instead of failing in public CI:
 
 ```bash
-.venv/bin/pip install pre-commit pylint && .venv/bin/pre-commit install
+.venv/bin/pip install pre-commit && .venv/bin/pre-commit install
 ```
 
 pylint is installed here as well, because its hook is declared `language: system`. Pre-commit does not build an environment for that hook. It calls pylint on the PATH, and fails if the package is absent. Every other hook, ruff included, brings its own pinned copy.
@@ -339,7 +339,7 @@ done
 Run them once now, on a clean tree, so you learn what they change before one rewrites a file you are mid-way through editing:
 
 ```bash
-.venv/bin/pre-commit run --all-files
+tox -e check
 ```
 
 The first run downloads the pinned tool versions, so it is slow. Run it, or shall I?
@@ -491,7 +491,7 @@ Changed code, docstring, and added test.
 A missing dependency skips a test instead of failing it. -rs prints one line per skip, so you see whether your new test actually ran.
 
 ```bash
-pytest tests/test_metrics.py -q -rs
+tox -e full -- tests/test_metrics.py -q -rs
 ```
 Run it, or shall I?
 :::
